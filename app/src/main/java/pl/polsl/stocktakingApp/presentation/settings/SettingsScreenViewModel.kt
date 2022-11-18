@@ -1,4 +1,4 @@
-package pl.polsl.stocktakingApp.presentation.settingsScreen
+package pl.polsl.stocktakingApp.presentation.settings
 
 
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,4 +1,4 @@
-package pl.polsl.stocktakingApp.presentation.listScreen
+package pl.polsl.stocktakingApp.presentation.list
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

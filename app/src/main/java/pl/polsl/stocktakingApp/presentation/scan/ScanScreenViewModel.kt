@@ -1,4 +1,4 @@
-package pl.polsl.stocktakingApp.presentation.scanScreen
+package pl.polsl.stocktakingApp.presentation.scan
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

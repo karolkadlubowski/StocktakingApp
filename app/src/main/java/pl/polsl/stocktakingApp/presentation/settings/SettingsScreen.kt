@@ -1,4 +1,4 @@
-package pl.polsl.stocktakingApp.presentation.scanScreen
+package pl.polsl.stocktakingApp.presentation.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,13 +11,13 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination
 @Composable
-fun ScanScreen(
+fun SettingsScreen(
     navigator: DestinationsNavigator,
-    viewModel: ScanScreenViewModel = hiltViewModel()
+    viewModel: SettingsScreenViewModel = hiltViewModel()
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Text("Scan Screen")
+        Text("Settings Screen")
     }
 }
