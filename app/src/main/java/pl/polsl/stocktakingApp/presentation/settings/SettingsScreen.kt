@@ -1,18 +1,16 @@
 package pl.polsl.stocktakingApp.presentation.settings
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.widget.Toast
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -20,19 +18,24 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
-import com.google.mlkit.vision.common.InputImage
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import pl.polsl.stocktakingApp.R
+import pl.polsl.stocktakingApp.presentation.scan.observeState
+import java.io.File
 import java.util.concurrent.Executors
 
 @Destination
@@ -46,11 +49,32 @@ fun SettingsScreen(
 //    ) {
 //        Text("Settings Screen")
 //    }
-    MLKitTextRecognition()
+
+    val state by viewModel.observeState()
+
+
+    when (state) {
+        is SettingsScreenState.Searching -> MLKitTextRecognition(onTakePhoto = viewModel::photoTaken)
+        is SettingsScreenState.Taken -> {
+            Column {
+                AsyncImage(
+                    modifier = Modifier.weight(1f),
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data((state as SettingsScreenState.Taken).photoUri).apply {
+                            if (LocalInspectionMode.current) {
+                                placeholder(R.drawable.placeholder)
+                            }
+                        }.build(),
+                    contentDescription = "Preview of image taken",
+                    contentScale = ContentScale.Crop,
+                )
+            }
+        }
+    }
 }
 
 @Composable
-fun MLKitTextRecognition() {
+fun MLKitTextRecognition(onTakePhoto: (Uri) -> Unit) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val extractedText = remember { mutableStateOf("") }
@@ -58,11 +82,20 @@ fun MLKitTextRecognition() {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        TextRecognitionView(
-            context = context,
-            lifecycleOwner = lifecycleOwner,
-            extractedText = extractedText
-        )
+        val imageCapture = remember {
+            ImageCapture.Builder()
+                .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+                .build()
+        }
+//        TextRecognitionView(
+//            context = context,
+//            lifecycleOwner = lifecycleOwner,
+//            extractedText = extractedText,
+//            onTakePhoto = onTakePhoto
+//        )
+
+        CameraView(modifier = Modifier, imageCapture = imageCapture)
+
         Text(
             text = extractedText.value,
             modifier = Modifier
@@ -70,6 +103,10 @@ fun MLKitTextRecognition() {
                 .background(Color.White)
                 .padding(16.dp)
         )
+
+        Button(onClick = { makeFile(context, imageCapture, onTakePhoto) }) {
+            Text(text = "make photo")
+        }
     }
 }
 
@@ -77,7 +114,8 @@ fun MLKitTextRecognition() {
 fun TextRecognitionView(
     context: Context,
     lifecycleOwner: LifecycleOwner,
-    extractedText: MutableState<String>
+    extractedText: MutableState<String>,
+    onTakePhoto: (Uri) -> Unit
 ) {
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     var preview by remember { mutableStateOf<Preview?>(null) }
@@ -86,6 +124,13 @@ fun TextRecognitionView(
     val textRecognizer =
         remember { TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS) }
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
+
+    val imageCapture = remember {
+        ImageCapture.Builder()
+            .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+            .setFlashMode(ImageCapture.FLASH_MODE_OFF)
+            .build()
+    }
 
     Box {
         AndroidView(
@@ -112,7 +157,8 @@ fun TextRecognitionView(
                         lifecycleOwner,
                         cameraSelector,
                         imageAnalysis,
-                        preview
+                        preview,
+                        imageCapture
                     )
                 }, executor)
                 preview = Preview.Builder().build().also {
@@ -130,7 +176,9 @@ fun TextRecognitionView(
                 .align(Alignment.TopStart)
         ) {
             IconButton(
-                onClick = { Toast.makeText(context, "Back Clicked", Toast.LENGTH_SHORT).show() }
+                onClick = {
+                    makeFile(context, imageCapture, onTakePhoto)
+                }
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
@@ -142,23 +190,37 @@ fun TextRecognitionView(
     }
 }
 
-class ObjectDetectorImageAnalyzer(
-    private val textRecognizer: TextRecognizer,
-    private val extractedText: MutableState<String>
-) : ImageAnalysis.Analyzer {
-    @SuppressLint("UnsafeOptInUsageError")
-    override fun analyze(imageProxy: ImageProxy) {
-        val mediaImage = imageProxy.image
-        if (mediaImage != null) {
-            val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+private fun makeFile(
+    context: Context,
+    imageCapture: ImageCapture,
+    onPhotoTaken: (Uri) -> Unit,
+) {
 
-            textRecognizer.process(image)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        extractedText.value = it.result?.text ?: ""
-                    }
-                    imageProxy.close()
-                }
-        }
+    val imageDirectory = File(context.filesDir.path + "/images")
+    if (!imageDirectory.exists()) {
+        imageDirectory.mkdir()
     }
+
+    val photoFile = File(
+        context.filesDir.path + "/images",
+        "${System.currentTimeMillis()}.jpg"
+    )
+    val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+
+    imageCapture.takePicture(
+        outputOptions,
+        Executors.newSingleThreadExecutor(),
+        object : ImageCapture.OnImageSavedCallback {
+            override fun onError(exception: ImageCaptureException) {
+                Toast.makeText(context, exception.message, Toast.LENGTH_SHORT)
+//                val message = when (exception.imageCaptureError) {
+//                    else -> Toast.makeText(context, exception.message, Toast.LENGTH_SHORT)
+//                }
+            }
+
+            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                onPhotoTaken(Uri.fromFile(photoFile))
+            }
+        },
+    )
 }

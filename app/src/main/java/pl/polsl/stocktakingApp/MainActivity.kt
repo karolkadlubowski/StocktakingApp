@@ -67,12 +67,20 @@ class MainActivity : ComponentActivity() {
         if (provideRationale) {
             ActivityCompat.requestPermissions(
                 context as Activity,
-                arrayOf(Manifest.permission.CAMERA), REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST
+                arrayOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST
             )
         } else {
             ActivityCompat.requestPermissions(
                 context as Activity,
-                arrayOf(Manifest.permission.CAMERA), REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST
+                arrayOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST
             )
         }
     }
