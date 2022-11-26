@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">StocktakingApp</string>
+    <string name="textNotRecognized">Skanowanie nie wykazało żadnego tekstu</string>
 </resources>
