@@ -1,4 +1,4 @@
-package pl.polsl.stocktakingApp.presentation.settings
+package pl.polsl.stocktakingApp.presentation.textScanner
 
 
 import android.net.Uri
@@ -15,16 +15,16 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SettingsScreenViewModel @Inject constructor(
+class TextScannerScreenViewModel @Inject constructor(
     _coroutineDispatcher: CoroutineDispatcher
-) : BaseViewModel<SettingsScreenState>(_coroutineDispatcher) {
-    override val initialState: SettingsScreenState = SettingsScreenState.Scanning
-    override val _state: MutableStateFlow<SettingsScreenState> = MutableStateFlow(initialState)
+) : BaseViewModel<TextScannerScreenState>(_coroutineDispatcher) {
+    override val initialState: TextScannerScreenState = TextScannerScreenState.Scanning
+    override val _state: MutableStateFlow<TextScannerScreenState> = MutableStateFlow(initialState)
 
     private val _recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
     fun onPhotoTaken(photoUri: Uri) {
-        _state.value = SettingsScreenState.Cropping(photoUri)
+        _state.value = TextScannerScreenState.Cropping(photoUri)
     }
 
 //    fun onPhotoCropped(photoUri: Uri) {
@@ -38,19 +38,20 @@ class SettingsScreenViewModel @Inject constructor(
 //        }
 //    }
 
+
     fun analyzePhoto(inputImage: InputImage, photoUri: Uri) {
         _recognizer.process(inputImage)
             .addOnSuccessListener { visionText ->
-                _state.value = SettingsScreenState.Found(photoUri, visionText.text)
+                _state.value = TextScannerScreenState.Found(photoUri, visionText.text)
             }
             .addOnFailureListener { e ->
-                _state.value = SettingsScreenState.Scanning
+                _state.value = TextScannerScreenState.Scanning
                 launch { _events.emit(Event.Message(R.string.textNotRecognized)) }
             }
     }
 
     fun continueScanning() {
-        _state.value = SettingsScreenState.Scanning
+        _state.value = TextScannerScreenState.Scanning
     }
 
     fun rejectPhotoAndContinuePointing(photoUri: Uri) {
@@ -59,8 +60,8 @@ class SettingsScreenViewModel @Inject constructor(
     }
 }
 
-sealed class SettingsScreenState {
-    object Scanning : SettingsScreenState()
-    data class Cropping(val takenPhotoUri: Uri) : SettingsScreenState()
-    data class Found(val finalPhotoUri: Uri, val foundId: String) : SettingsScreenState()
+sealed class TextScannerScreenState {
+    object Scanning : TextScannerScreenState()
+    data class Cropping(val takenPhotoUri: Uri) : TextScannerScreenState()
+    data class Found(val finalPhotoUri: Uri, val foundId: String) : TextScannerScreenState()
 }

@@ -1,4 +1,4 @@
-package pl.polsl.stocktakingApp.presentation.settings
+package pl.polsl.stocktakingApp.presentation.textScanner
 
 import android.annotation.SuppressLint
 import androidx.camera.core.ImageAnalysis
