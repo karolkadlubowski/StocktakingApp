@@ -34,7 +34,6 @@ fun TextScannerScreen(
         if (result.isSuccessful) {
             viewModel.analyzePhoto(
                 InputImage.fromFilePath(context, result.uriContent!!),
-                result.uriContent!!
             )
         } else {
             // TODO

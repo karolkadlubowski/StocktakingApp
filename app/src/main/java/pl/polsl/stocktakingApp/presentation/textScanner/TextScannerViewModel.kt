@@ -39,15 +39,23 @@ class TextScannerScreenViewModel @Inject constructor(
 //    }
 
 
-    fun analyzePhoto(inputImage: InputImage, photoUri: Uri) {
+    fun analyzePhoto(inputImage: InputImage) {
+        deletePhoto()
         _recognizer.process(inputImage)
             .addOnSuccessListener { visionText ->
-                _state.value = TextScannerScreenState.Found(photoUri, visionText.text)
+                _state.value = TextScannerScreenState.Found(visionText.text)
             }
             .addOnFailureListener { e ->
                 _state.value = TextScannerScreenState.Scanning
                 launch { _events.emit(Event.Message(R.string.textNotRecognized)) }
             }
+    }
+
+    private fun deletePhoto() {
+        val state = _state.value
+        if (state is TextScannerScreenState.Cropping) {
+            state.takenPhotoUri.toFile().delete()
+        }
     }
 
     fun continueScanning() {
@@ -63,5 +71,5 @@ class TextScannerScreenViewModel @Inject constructor(
 sealed class TextScannerScreenState {
     object Scanning : TextScannerScreenState()
     data class Cropping(val takenPhotoUri: Uri) : TextScannerScreenState()
-    data class Found(val finalPhotoUri: Uri, val foundId: String) : TextScannerScreenState()
+    data class Found(val foundId: String) : TextScannerScreenState()
 }
