@@ -9,8 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import pl.polsl.stocktakingApp.presentation.destinations.ScanScreenDestination
-import pl.polsl.stocktakingApp.presentation.destinations.SettingsScreenDestination
+import pl.polsl.stocktakingApp.presentation.destinations.ConfigScreenDestination
+import pl.polsl.stocktakingApp.presentation.destinations.TextScannerScreenDestination
+
 
 @Destination(start = true)
 @Composable
@@ -24,15 +25,15 @@ fun ListScreen(
         Text("List Screen")
 
         Button(onClick = {
-            navigator.navigate(ScanScreenDestination)
+            navigator.navigate(ConfigScreenDestination)
         }) {
-            Text(text = "Go to Scan Screen")
+            Text(text = "Go to Config Screen")
         }
 
         Button(onClick = {
-            navigator.navigate(SettingsScreenDestination)
+            navigator.navigate(TextScannerScreenDestination)
         }) {
-            Text(text = "Go to Settings Screen")
+            Text(text = "Go to Scanner Screen")
         }
 
     }

@@ -1,4 +1,4 @@
-package pl.polsl.stocktakingApp.presentation.scan
+package pl.polsl.stocktakingApp.presentation.configuration
 
 import android.net.Uri
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,24 +8,24 @@ import pl.polsl.stocktakingApp.presentation.common.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ScanScreenViewModel @Inject constructor(
+class ConfigScreenViewModel @Inject constructor(
     _coroutineDispatcher: CoroutineDispatcher
-) : BaseViewModel<ScanScreenState>(_coroutineDispatcher) {
-    override val initialState: ScanScreenState = ScanScreenState.InitialState()
-    override val _state: MutableStateFlow<ScanScreenState> = MutableStateFlow(initialState)
+) : BaseViewModel<ConfigScreenState>(_coroutineDispatcher) {
+    override val initialState: ConfigScreenState = ConfigScreenState.InitialState()
+    override val _state: MutableStateFlow<ConfigScreenState> = MutableStateFlow(initialState)
 
     fun changeUri(uri: Uri?) {
-        _state.value = ScanScreenState.InitialState(uri)
+        _state.value = ConfigScreenState.InitialState(uri)
     }
 }
 
 
-sealed class ScanScreenState {
+sealed class ConfigScreenState {
     abstract val uri: Uri?
 
     data class InitialState(
         override val uri: Uri? = null
-    ) : ScanScreenState()
+    ) : ConfigScreenState()
 
     //object ReadyState : ScanScreenState()
 }

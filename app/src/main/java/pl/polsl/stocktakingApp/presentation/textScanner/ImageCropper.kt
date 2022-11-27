@@ -1,4 +1,4 @@
-package pl.polsl.stocktakingApp.presentation.settings
+package pl.polsl.stocktakingApp.presentation.textScanner
 
 import android.content.Context
 import android.net.Uri

@@ -1,4 +1,4 @@
-package pl.polsl.stocktakingApp.presentation.scan
+package pl.polsl.stocktakingApp.presentation.configuration
 
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -60,9 +60,9 @@ internal fun <TYPE> Flow<TYPE>.observeWithLifecycle(
 
 @Destination
 @Composable
-fun ScanScreen(
+fun ConfigScreen(
     navigator: DestinationsNavigator,
-    viewModel: ScanScreenViewModel = hiltViewModel()
+    viewModel: ConfigScreenViewModel = hiltViewModel()
 ) {
     val state by viewModel.observeState()
 
@@ -77,7 +77,7 @@ fun ScanScreen(
 
 @Composable
 fun ImageSelectorAndCropper(
-    state: ScanScreenState,
+    state: ConfigScreenState,
     changeUri: (uri: Uri?) -> Unit
 ) {
 //    var imageUri: Uri? = remember {
