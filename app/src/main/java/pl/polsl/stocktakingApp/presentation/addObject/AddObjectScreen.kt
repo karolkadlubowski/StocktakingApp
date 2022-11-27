@@ -1,9 +1,6 @@
-package pl.polsl.stocktakingApp.presentation.common.ui
+package pl.polsl.stocktakingApp.presentation.addObject
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
@@ -13,22 +10,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AddObjectDialog(objectId: String?, onAccept: () -> Unit, onCancel: () -> Unit) {
-    Dialog(
-        onDismissRequest = onCancel, properties = DialogProperties(
-            usePlatformDefaultWidth = false
-        )
-    ) {
+@Destination
+fun AddObjectScreen(
+    navigator: DestinationsNavigator,
+    viewModel: AddObjectScreenViewModel = hiltViewModel(),
+    objectId: String
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
         val shape = RoundedCornerShape(10.dp)
 
         var id = remember { mutableStateOf(TextFieldValue(objectId ?: "")) }
@@ -78,11 +75,11 @@ fun AddObjectDialog(objectId: String?, onAccept: () -> Unit, onCancel: () -> Uni
                 )
 
                 Row {
-                    Button(onClick = onAccept) {
+                    Button(onClick = {}) {
                         Text(text = "Akceptuj")
                     }
 
-                    Button(onClick = onCancel) {
+                    Button(onClick = { }) {
                         Text(text = "Anuluj")
                     }
                 }
