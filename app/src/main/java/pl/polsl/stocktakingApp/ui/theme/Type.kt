@@ -1,6 +1,8 @@
 package pl.polsl.stocktakingApp.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -32,3 +34,34 @@ val Typography = Typography(
     )
     */
 )
+
+val Typography.emptyButton: TextStyle
+    @Composable
+    get() = TextStyle(
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold
+    )
+
+val Typography.pageTitle: TextStyle
+    @Composable
+    get() = TextStyle(
+        color = Color.White,
+        fontSize = 30.sp,
+        fontWeight = FontWeight.Bold
+    )
+
+val Typography.cardTitle: TextStyle
+    @Composable
+    get() = TextStyle(
+        color = Color.White,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold
+    )
+
+val Typography.cardDescription: TextStyle
+    @Composable
+    get() = TextStyle(
+        color = Color.White,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Normal
+    )
