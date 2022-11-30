@@ -1,6 +1,7 @@
 package pl.polsl.stocktakingApp.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 
 object C {
     val LightBlue = Color(0xFF5DBAFE)
@@ -13,5 +14,8 @@ object C {
     val SettingsOrange = Color(0xFFF7941C)
     val xd1 = Color(0xffF7B05C)
     val xd2 = Color(0xFFF6931A)
+    val statusBarColor =
+        BackgroundDarker.copy(alpha = 0.08f).compositeOver(BackgroundLighter.copy())
+
 }
 

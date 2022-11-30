@@ -22,10 +22,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.data.StocktakingObject
-import pl.polsl.stocktakingApp.presentation.common.ui.ButtonBottomBar
 import pl.polsl.stocktakingApp.presentation.common.ui.ObjectItem
-import pl.polsl.stocktakingApp.presentation.destinations.AddObjectScreenDestination
 import pl.polsl.stocktakingApp.presentation.destinations.ConfigScreenDestination
+import pl.polsl.stocktakingApp.presentation.destinations.ModifyObjectScreenDestination
 import pl.polsl.stocktakingApp.presentation.destinations.TextScannerScreenDestination
 import pl.polsl.stocktakingApp.ui.theme.C
 import pl.polsl.stocktakingApp.ui.theme.D
@@ -39,9 +38,11 @@ fun ListScreen(
     navigator: DestinationsNavigator,
     viewModel: ListScreenViewModel = hiltViewModel()
 ) {
-    Scaffold(bottomBar = {
-        ButtonBottomBar(buttonText = "Rozpocznij skanowanie", onClickButton = {})
-    }) {
+    Scaffold(
+//        bottomBar = {
+//        ButtonBottomBar(buttonText = "Rozpocznij skanowanie", onClickButton = {})
+//    }
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -65,6 +66,24 @@ fun ListScreen(
                 )
 
                 Icon(
+                    painter = painterResource(id = R.drawable.ic_scan),
+                    contentDescription = stringResource(R.string.iconDescription),
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .padding(start = D.Icon.padding)
+                        .then(
+                            Modifier
+                                .aspectRatio(1f)
+                                .clip(CircleShape)
+                            //.background(C.Golden)
+                        )
+                        .clickable {
+                            navigator.navigate(TextScannerScreenDestination)
+                        }
+                        .weight(0.15f)
+                )
+
+                Icon(
                     painter = painterResource(id = R.drawable.ic_add),
                     contentDescription = stringResource(R.string.iconDescription),
                     tint = Color.Unspecified,
@@ -77,7 +96,7 @@ fun ListScreen(
                             //.background(C.Golden)
                         )
                         .clickable {
-                            navigator.navigate(AddObjectScreenDestination())
+                            navigator.navigate(ModifyObjectScreenDestination())
                         }
                         .weight(0.15f)
                 )
@@ -101,10 +120,9 @@ fun ListScreen(
                                         )
                                     )
                                 )
-
                         )
                         .clickable {
-                            navigator.navigate(AddObjectScreenDestination())
+                            navigator.navigate(ConfigScreenDestination)
                         }
                         .weight(0.15f)
                 )
@@ -141,21 +159,6 @@ fun ListScreen(
                     key = { it.id }
                 ) {
                     ObjectItem(stocktakingObject = it)
-                }
-
-
-                item {
-                    Button(onClick = {
-                        navigator.navigate(ConfigScreenDestination)
-                    }) {
-                        Text(text = "Go to Config Screen")
-                    }
-
-                    Button(onClick = {
-                        navigator.navigate(TextScannerScreenDestination)
-                    }) {
-                        Text(text = "Go to Scanner Screen")
-                    }
                 }
             }
         }

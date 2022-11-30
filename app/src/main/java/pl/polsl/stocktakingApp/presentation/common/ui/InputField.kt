@@ -55,7 +55,7 @@ fun InputField(
         )
 
         Surface(
-            shape = Shapes.rounded,
+            shape = S.rounded,
             shadowElevation = D.Elevation.default,
             border = border,
             modifier = Modifier

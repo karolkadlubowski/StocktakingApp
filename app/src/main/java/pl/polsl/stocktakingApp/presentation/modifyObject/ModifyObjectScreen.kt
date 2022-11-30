@@ -1,9 +1,9 @@
-package pl.polsl.stocktakingApp.presentation.addObject
+package pl.polsl.stocktakingApp.presentation.modifyObject
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -17,19 +17,21 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pl.polsl.stocktakingApp.data.StocktakingObject
 import pl.polsl.stocktakingApp.presentation.common.ui.InputField
+import pl.polsl.stocktakingApp.ui.theme.captionButton
 import pl.polsl.stocktakingApp.ui.theme.pageTitle
 
 @Composable
 @Destination
-fun AddObjectScreen(
+fun ModifyObjectScreen(
     navigator: DestinationsNavigator,
-    viewModel: AddObjectScreenViewModel = hiltViewModel(),
+    viewModel: ModifyObjectScreenViewModel = hiltViewModel(),
     objectId: String? = null,
     stocktakingObject: StocktakingObject? = null
 ) {
@@ -79,42 +81,38 @@ fun AddObjectScreen(
             keyboardOptions = KeyboardOptions().copy(keyboardType = KeyboardType.Number)
         )
 
-//        BasicTextField(
-//            value = id.value, onValueChange = {
-//                id.value = it
-//            }, enabled = objectId.isNullOrBlank(),
-//            modifier = Modifier.padding(bottom = 10.dp)
-//        )
-//        BasicTextField(
-//            value = name.value, onValueChange = {
-//                name.value = it
-//            },
-//            modifier = Modifier.padding(bottom = 10.dp),
-//            singleLine = true
-//        )
-//        BasicTextField(
-//            value = description.value,
-//            onValueChange = {
-//                description.value = it
-//            },
-//            modifier = Modifier.padding(bottom = 10.dp),
-//        )
-//        BasicTextField(
-//            value = amount.value, onValueChange = {
-//                amount.value = it
-//            },
-//            modifier = Modifier.padding(bottom = 10.dp),
-//            singleLine = true
-//        )
-
-        Row {
-            Button(onClick = {}) {
-                Text(text = "Akceptuj")
-            }
-
-            Button(onClick = { }) {
-                Text(text = "Anuluj")
-            }
+        Button(
+            onClick = {}, modifier = Modifier.padding(top = 20.dp)
+        ) {
+            Text(
+                textAlign = TextAlign.Center,
+                text = "Akceptuj",
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .fillMaxWidth(),
+                //.height(40.dp),
+                style = MaterialTheme.typography.captionButton
+            )
         }
+
+//        FilledButton(onClick = { /*TODO*/ }) {
+//            Text(
+//                textAlign = TextAlign.Center,
+//                text = "Akceptuj",
+//                modifier = Modifier
+//                    .fillMaxSize(),
+//                style = MaterialTheme.typography.captionButton
+//            )
+//        }
+
+//        Row {
+//            Button(onClick = {}) {
+//                Text(text = "Akceptuj")
+//            }
+//
+//            Button(onClick = { }) {
+//                Text(text = "Anuluj")
+//            }
+//        }
     }
 }

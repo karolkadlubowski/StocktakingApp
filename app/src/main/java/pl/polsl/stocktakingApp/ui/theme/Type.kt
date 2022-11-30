@@ -35,10 +35,10 @@ val Typography = Typography(
     */
 )
 
-val Typography.emptyButton: TextStyle
+val Typography.captionButton: TextStyle
     @Composable
     get() = TextStyle(
-        fontSize = 20.sp,
+        fontSize = 22.sp,
         fontWeight = FontWeight.Bold
     )
 

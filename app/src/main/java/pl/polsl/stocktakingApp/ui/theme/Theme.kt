@@ -6,7 +6,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -79,9 +78,10 @@ fun StocktakingAppTheme(
         SideEffect {
             (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
             ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
-            (view.context as Activity).window.navigationBarColor =
-                colorScheme.primary.copy(alpha = 0.08f).compositeOver(colorScheme.surface.copy())
-                    .toArgb()
+            (view.context as Activity).window.navigationBarColor = C.statusBarColor.toArgb()
+            //colorScheme.primary.toArgb()
+//                colorScheme.primary.copy(alpha = 0.08f).compositeOver(colorScheme.surface.copy())
+//                    .toArgb()
         }
     }
 

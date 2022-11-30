@@ -6,24 +6,27 @@ import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.text.TextRecognizer
+import pl.polsl.stocktakingApp.R
+import pl.polsl.stocktakingApp.ui.theme.C
 import java.io.File
 import java.util.concurrent.Executors
 
@@ -37,7 +40,7 @@ fun MLKitTextRecognition(
     val lifecycleOwner = LocalLifecycleOwner.current
     val extractedText = remember { mutableStateOf("") }
 
-    Column(
+    Box(
         modifier = Modifier.fillMaxSize()
     ) {
         val imageCapture = remember {
@@ -54,9 +57,28 @@ fun MLKitTextRecognition(
             textRecognizer = textRecognizer
         )
 
-        Button(onClick = { makeFile(context, imageCapture, onTakePhoto) }) {
-            Text(text = "make photo")
-        }
+//        Button(onClick = { makeFile(context, imageCapture, onTakePhoto) }) {
+//            Text(text = "make photo")
+//        }
+
+        IconButton(
+            modifier = Modifier
+                .padding(bottom = 20.dp)
+                .align(Alignment.BottomCenter),
+            onClick = {
+                makeFile(context, imageCapture, onTakePhoto)
+            },
+            content = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_lens),
+                    contentDescription = "Take picture",
+                    tint = C.statusBarColor,
+                    modifier = Modifier
+                        .size(70.dp)
+                        .padding(1.dp)
+                        .border(1.dp, C.statusBarColor, CircleShape)
+                )
+            })
     }
 }
 
@@ -79,7 +101,7 @@ fun TextRecognitionView(
         AndroidView(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.7f),
+                .fillMaxHeight(),
             factory = { ctx ->
                 val previewView = PreviewView(ctx)
                 cameraProviderFuture.addListener({

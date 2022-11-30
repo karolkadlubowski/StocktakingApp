@@ -1,4 +1,4 @@
-package pl.polsl.stocktakingApp.presentation.addObject
+package pl.polsl.stocktakingApp.presentation.modifyObject
 
 import androidx.annotation.StringRes
 import pl.polsl.stocktakingApp.R
