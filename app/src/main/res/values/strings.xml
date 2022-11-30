@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">StocktakingApp</string>
     <string name="textNotRecognized">Skanowanie nie wykazało żadnego tekstu</string>
+    <string name="objectList">Lista obiektów</string>
+    <string name="iconDescription">Ikona</string>
+    <string name="addObject">Dodaj obiekt</string>
+    <string name="editObject">Edytuj obiekt</string>
 </resources>

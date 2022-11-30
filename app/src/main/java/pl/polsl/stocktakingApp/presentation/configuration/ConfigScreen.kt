@@ -8,16 +8,21 @@ import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -29,6 +34,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.Flow
 import pl.polsl.stocktakingApp.presentation.common.BaseViewModel
+import pl.polsl.stocktakingApp.ui.theme.pageTitle
 
 @Composable
 internal fun <STATE> BaseViewModel<STATE>.observeState(
@@ -67,11 +73,26 @@ fun ConfigScreen(
     val state by viewModel.observeState()
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.primary,
+                        MaterialTheme.colorScheme.secondary,
+                    )
+                )
+            )
+            .padding(16.dp)
     ) {
-        Text("Scan Screen")
 
-        ImageSelectorAndCropper(state, viewModel::changeUri)
+        Text(
+            "Konfiguracja",
+            style = MaterialTheme.typography.pageTitle,
+            modifier = Modifier
+                .padding(vertical = 10.dp)
+            //.weight(1f)
+        )
     }
 }
 

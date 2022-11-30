@@ -3,11 +3,7 @@ package pl.polsl.stocktakingApp.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
@@ -15,16 +11,28 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 
+//private val textFieldColors: TextFieldColors
+//@Composable
+//    get() = TextFieldDefaults.textFieldColors()
+
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = C.BackgroundDarker,
+    secondary = C.BackgroundLighter,
+    tertiary = C.BackgroundDarker,
+//    //background = Color.White,
+//    onBackground = C.AlmostBlack,
+    surface = C.BackgroundLighter,
+//    onSurface = C.AlmostBlack,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = C.BackgroundDarker,
+    secondary = C.BackgroundLighter,
+    tertiary = C.BackgroundDarker,
+//    //background = Color.White,
+//    onBackground = C.AlmostBlack,
+    surface = C.BackgroundLighter,
+//    onSurface = C.AlmostBlack,
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -44,6 +52,19 @@ fun StocktakingAppTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+//    val systemUiController = rememberSystemUiController()
+//    if(darkTheme){
+//        systemUiController.setSystemBarsColor(
+//            color = DarkColorScheme.background,
+//            darkIcons = true,
+//        )
+//    }else{
+//        systemUiController.setSystemBarsColor(
+//            color = LightColorScheme.background,
+//            darkIcons = true,
+//            )
+//    }
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
@@ -57,6 +78,10 @@ fun StocktakingAppTheme(
         SideEffect {
             (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
             ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
+            (view.context as Activity).window.navigationBarColor = C.statusBarColor.toArgb()
+            //colorScheme.primary.toArgb()
+//                colorScheme.primary.copy(alpha = 0.08f).compositeOver(colorScheme.surface.copy())
+//                    .toArgb()
         }
     }
 

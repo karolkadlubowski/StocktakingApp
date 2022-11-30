@@ -1,11 +1,21 @@
 package pl.polsl.stocktakingApp.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+object C {
+    val LightBlue = Color(0xFF5DBAFE)
+    val AlmostBlack = Color(0xFF1E1E1F)
+    val BackgroundDarker = Color(0xFF1C2023)
+    val BackgroundLighter = Color(0xFF32393F)
+    val CardBlack = Color(0xFF2D3134)
+    val BorderGrey = Color(0xFF45494C)
+    val Transparent = Color(0)
+    val SettingsOrange = Color(0xFFF7941C)
+    val xd1 = Color(0xffF7B05C)
+    val xd2 = Color(0xFFF6931A)
+    val statusBarColor =
+        BackgroundDarker.copy(alpha = 0.08f).compositeOver(BackgroundLighter.copy())
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+}
+

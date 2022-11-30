@@ -15,7 +15,7 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pl.polsl.stocktakingApp.presentation.configuration.observeState
-import pl.polsl.stocktakingApp.presentation.destinations.AddObjectScreenDestination
+import pl.polsl.stocktakingApp.presentation.destinations.ModifyObjectScreenDestination
 
 @Destination
 @Composable
@@ -57,7 +57,7 @@ fun TextScannerScreen(
         }
         is TextScannerScreenState.Found -> {
             navigator.navigate(
-                AddObjectScreenDestination(
+                ModifyObjectScreenDestination(
                     (state as TextScannerScreenState.Found).foundId
                 )
             )
