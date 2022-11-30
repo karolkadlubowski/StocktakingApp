@@ -65,3 +65,19 @@ val Typography.cardDescription: TextStyle
         fontSize = 14.sp,
         fontWeight = FontWeight.Normal
     )
+
+val Typography.inputFieldHeader: TextStyle
+    @Composable
+    get() = TextStyle(
+        color = Color.White,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+    )
+
+val Typography.inputField: TextStyle
+    @Composable
+    get() = TextStyle(
+        color = Color.White,
+        fontWeight = FontWeight.Normal,
+        fontSize = 22.sp,
+    )

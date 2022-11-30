@@ -11,5 +11,7 @@ object C {
     val BorderGrey = Color(0xFF45494C)
     val Transparent = Color(0)
     val SettingsOrange = Color(0xFFF7941C)
+    val xd1 = Color(0xffF7B05C)
+    val xd2 = Color(0xFFF6931A)
 }
 

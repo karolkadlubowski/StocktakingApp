@@ -22,6 +22,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.data.StocktakingObject
+import pl.polsl.stocktakingApp.presentation.common.ui.ButtonBottomBar
 import pl.polsl.stocktakingApp.presentation.common.ui.ObjectItem
 import pl.polsl.stocktakingApp.presentation.destinations.AddObjectScreenDestination
 import pl.polsl.stocktakingApp.presentation.destinations.ConfigScreenDestination
@@ -38,94 +39,123 @@ fun ListScreen(
     navigator: DestinationsNavigator,
     viewModel: ListScreenViewModel = hiltViewModel()
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.primary,
-                        MaterialTheme.colorScheme.secondary,
+    Scaffold(bottomBar = {
+        ButtonBottomBar(buttonText = "Rozpocznij skanowanie", onClickButton = {})
+    }) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.secondary,
+                        )
+                    )
+                )
+                .padding(16.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    stringResource(id = R.string.objectList),
+                    style = MaterialTheme.typography.pageTitle,
+                    modifier = Modifier
+                        .padding(vertical = 10.dp)
+                        .weight(1f)
+                )
 
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_add),
+                    contentDescription = stringResource(R.string.iconDescription),
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .padding(start = D.Icon.padding)
+                        .then(
+                            Modifier
+                                .aspectRatio(1f)
+                                .clip(CircleShape)
+                            //.background(C.Golden)
+                        )
+                        .clickable {
+                            navigator.navigate(AddObjectScreenDestination())
+                        }
+                        .weight(0.15f)
+                )
+
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_settings),
+                    contentDescription = stringResource(R.string.iconDescription),
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .padding(start = D.Icon.padding)
+                        .then(
+                            Modifier
+                                .aspectRatio(1f)
+                                .clip(CircleShape)
+                                //.background(C.SettingsOrange)
+                                .background(
+                                    brush = Brush.linearGradient(
+                                        colors = listOf(
+                                            C.xd1,
+                                            C.xd2,
+                                        )
+                                    )
+                                )
 
                         )
+                        .clickable {
+                            navigator.navigate(AddObjectScreenDestination())
+                        }
+                        .weight(0.15f)
                 )
-            )
-            .padding(16.dp)
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                stringResource(id = R.string.objectList),
-                style = MaterialTheme.typography.pageTitle,
-                modifier = Modifier
-                    .padding(vertical = 10.dp)
-                    .weight(1f)
-            )
 
-            Icon(
-                painter = painterResource(id = R.drawable.ic_settings),
-                contentDescription = stringResource(R.string.iconDescription),
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .padding(start = D.Icon.padding)
-                    .then(
-                        Modifier
-                            .aspectRatio(1f)
-                            .clip(CircleShape)
-                            .background(C.SettingsOrange)
-                    )
-                    .clickable {
-                        navigator.navigate(AddObjectScreenDestination("12321"))
-                    }
-                    .weight(0.14f)
-            )
-
-        }
-
-        var list = remember {
-            listOf(
-                StocktakingObject("ST-13771", "Komputer stacj", "blabla", 7),
-                StocktakingObject("ST-13772", "Komputer stacj", "blabla", 7),
-                StocktakingObject("ST-13773", "Komputer stacj", "blabla", 7),
-                StocktakingObject("ST-13774", "Komputer stacj", "blabla", 7),
-                StocktakingObject("ST-13775", "Komputer stacj", "blabla", 7),
-                StocktakingObject("ST-13776", "Komputer stacj", "blabla", 7),
-                StocktakingObject("ST-13777", "Komputer stacj", "blabla", 7),
-            )
-        }
-
-        //Scaffold(modifier = Modifier) {
-        LazyColumn(
-            Modifier
-                .fillMaxSize()
-        ) {
-
-//                LazyListScope.items<StocktakingObject>(
-//                    items = list,
-//                    key = { it.id }
-//                ) {
-//
-//                }
-
-            items(
-                items = list,
-                key = { it.id }
-            ) {
-                ObjectItem(stocktakingObject = it)
             }
 
+            var list = remember {
+                listOf(
+                    StocktakingObject("ST-13771", "Komputer stacj", "blabla", 7),
+                    StocktakingObject("ST-13772", "Komputer stacj", "blabla", 7),
+                    StocktakingObject("ST-13773", "Komputer stacj", "blabla", 7),
+                    StocktakingObject("ST-13774", "Komputer stacj", "blabla", 7),
+                    StocktakingObject("ST-13775", "Komputer stacj", "blabla", 7),
+                    StocktakingObject("ST-13776", "Komputer stacj", "blabla", 7),
+                    StocktakingObject("ST-13777", "Komputer stacj", "blabla", 7),
+                )
+            }
 
-            item {
-                Button(onClick = {
-                    navigator.navigate(ConfigScreenDestination)
-                }) {
-                    Text(text = "Go to Config Screen")
+            //Scaffold(modifier = Modifier) {
+            LazyColumn(
+                Modifier
+                    .fillMaxSize()
+            ) {
+
+                //                LazyListScope.items<StocktakingObject>(
+                //                    items = list,
+                //                    key = { it.id }
+                //                ) {
+                //
+                //                }
+
+                items(
+                    items = list,
+                    key = { it.id }
+                ) {
+                    ObjectItem(stocktakingObject = it)
                 }
 
-                Button(onClick = {
-                    navigator.navigate(TextScannerScreenDestination)
-                }) {
-                    Text(text = "Go to Scanner Screen")
+
+                item {
+                    Button(onClick = {
+                        navigator.navigate(ConfigScreenDestination)
+                    }) {
+                        Text(text = "Go to Config Screen")
+                    }
+
+                    Button(onClick = {
+                        navigator.navigate(TextScannerScreenDestination)
+                    }) {
+                        Text(text = "Go to Scanner Screen")
+                    }
                 }
             }
         }
