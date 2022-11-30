@@ -82,7 +82,16 @@ fun ModifyObjectScreen(
         )
 
         Button(
-            onClick = {}, modifier = Modifier.padding(top = 20.dp)
+            onClick = {
+                viewModel.upsertObject(
+                    StocktakingObject(
+                        id.value.text,
+                        name.value.text,
+                        description.value.text,
+                        amount.value.text.toInt()
+                    )
+                )
+            }, modifier = Modifier.padding(top = 20.dp)
         ) {
             Text(
                 textAlign = TextAlign.Center,
