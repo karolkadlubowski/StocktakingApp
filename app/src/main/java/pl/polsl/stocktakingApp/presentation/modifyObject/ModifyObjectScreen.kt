@@ -24,6 +24,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.presentation.common.ui.InputField
+import pl.polsl.stocktakingApp.presentation.destinations.ListScreenDestination
 import pl.polsl.stocktakingApp.ui.theme.captionButton
 import pl.polsl.stocktakingApp.ui.theme.pageTitle
 
@@ -91,6 +92,7 @@ fun ModifyObjectScreen(
                         amount.value.text.toInt()
                     )
                 )
+                navigator.popBackStack(ListScreenDestination, false)
             }, modifier = Modifier.padding(top = 20.dp)
         ) {
             Text(
