@@ -22,8 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import pl.polsl.stocktakingApp.data.StocktakingObject
+import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.presentation.common.ui.InputField
+import pl.polsl.stocktakingApp.presentation.destinations.ListScreenDestination
 import pl.polsl.stocktakingApp.ui.theme.captionButton
 import pl.polsl.stocktakingApp.ui.theme.pageTitle
 
@@ -82,7 +83,17 @@ fun ModifyObjectScreen(
         )
 
         Button(
-            onClick = {}, modifier = Modifier.padding(top = 20.dp)
+            onClick = {
+                viewModel.upsertObject(
+                    StocktakingObject(
+                        id.value.text,
+                        name.value.text,
+                        description.value.text,
+                        amount.value.text.toInt()
+                    )
+                )
+                navigator.popBackStack(ListScreenDestination, false)
+            }, modifier = Modifier.padding(top = 20.dp)
         ) {
             Text(
                 textAlign = TextAlign.Center,
