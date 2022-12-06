@@ -5,4 +5,6 @@
     <string name="iconDescription">Ikona</string>
     <string name="addObject">Dodaj obiekt</string>
     <string name="editObject">Edytuj obiekt</string>
+    <string name="barcodeLabel">Kod kreskowy</string>
+    <string name="qrLabel">Kod QR</string>
 </resources>

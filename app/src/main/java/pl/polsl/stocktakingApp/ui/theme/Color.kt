@@ -1,5 +1,6 @@
 package pl.polsl.stocktakingApp.ui.theme
 
+import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 
@@ -16,6 +17,14 @@ object C {
     val xd2 = Color(0xFFF6931A)
     val statusBarColor =
         BackgroundDarker.copy(alpha = 0.08f).compositeOver(BackgroundLighter.copy())
+
+    val GradientOrange = linearGradient(
+        colors = listOf(
+            C.xd1,
+            C.xd2,
+        )
+    )
+
 
 }
 

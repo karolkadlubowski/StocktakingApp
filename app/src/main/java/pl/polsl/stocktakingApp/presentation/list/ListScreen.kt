@@ -21,8 +21,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pl.polsl.stocktakingApp.R
+import pl.polsl.stocktakingApp.common.observeState
 import pl.polsl.stocktakingApp.presentation.common.ui.ObjectItem
-import pl.polsl.stocktakingApp.presentation.configuration.observeState
 import pl.polsl.stocktakingApp.presentation.destinations.ConfigScreenDestination
 import pl.polsl.stocktakingApp.presentation.destinations.ModifyObjectScreenDestination
 import pl.polsl.stocktakingApp.presentation.destinations.TextScannerScreenDestination
@@ -115,12 +115,7 @@ fun ListScreen(
                                 .clip(CircleShape)
                                 //.background(C.SettingsOrange)
                                 .background(
-                                    brush = Brush.linearGradient(
-                                        colors = listOf(
-                                            C.xd1,
-                                            C.xd2,
-                                        )
-                                    )
+                                    brush = C.GradientOrange
                                 )
                         )
                         .clickable {

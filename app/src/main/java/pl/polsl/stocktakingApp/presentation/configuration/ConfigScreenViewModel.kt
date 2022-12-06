@@ -1,6 +1,5 @@
 package pl.polsl.stocktakingApp.presentation.configuration
 
-import android.net.Uri
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,17 +13,17 @@ class ConfigScreenViewModel @Inject constructor(
     override val initialState: ConfigScreenState = ConfigScreenState.InitialState()
     override val _state: MutableStateFlow<ConfigScreenState> = MutableStateFlow(initialState)
 
-    fun changeUri(uri: Uri?) {
-        _state.value = ConfigScreenState.InitialState(uri)
+    fun changeCodeType(codeType: CodeType) {
+        _state.value = ConfigScreenState.InitialState(codeType)
     }
 }
 
 
 sealed class ConfigScreenState {
-    abstract val uri: Uri?
+    abstract val codeType: CodeType
 
     data class InitialState(
-        override val uri: Uri? = null
+        override val codeType: CodeType = CodeType.QR,
     ) : ConfigScreenState()
 
     //object ReadyState : ScanScreenState()
