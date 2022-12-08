@@ -34,12 +34,12 @@ fun FilterSwitcher(
     }
     Surface(
         color = Color.Transparent,
-        shape = Shape.rounded,
+        shape = S.rounded,
         modifier = modifier.padding(bottom = D.FilterSwitcher.paddingBottom)
     ) {
         OurTabRow(
             modifier = Modifier
-                .clip(Shape.rounded)
+                .clip(S.rounded)
                 .fillMaxWidth()
                 .height(D.FilterSwitcher.height)
                 .background(C.Transparent),
@@ -108,7 +108,7 @@ private fun Indicator(tabPosition: TabPosition) {
             .wrapContentSize(align = Alignment.BottomStart)
             .offset(x = ind)
             .width(tabPosition.width)
-            .clip(Shape.rounded)
+            .clip(S.rounded)
             .background(LocalFilterSwitcherTheme.current.indicatorColor)
             .fillMaxSize()
     )

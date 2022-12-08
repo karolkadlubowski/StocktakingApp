@@ -122,7 +122,7 @@ val LocalFilterSwitcherTheme = staticCompositionLocalOf {
         selectedFontWeight = FontWeight.W700,
         fontWeight = FontWeight.W400,
         fontSize = 14.sp,
-        itemShape = Shape.rounded,
+        itemShape = S.rounded,
         elevation = 12.dp
     )
 }

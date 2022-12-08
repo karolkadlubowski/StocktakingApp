@@ -7,4 +7,6 @@
     <string name="editObject">Edytuj obiekt</string>
     <string name="barcodeLabel">Kod kreskowy</string>
     <string name="qrLabel">Kod QR</string>
+    <string name="getBondedDevicesError">Nie można pobrać listy sparowanych urządzeń</string>
+    <string name="bluetoothEnablingError">Wystąpił błąd podczas uruchamiania bluetooth</string>
 </resources>

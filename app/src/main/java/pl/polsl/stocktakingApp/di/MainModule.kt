@@ -9,13 +9,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import pl.polsl.printer.OutputBluetoothService
 import pl.polsl.stocktakingApp.data.Database
 import pl.polsl.stocktakingApp.data.dao.StocktakingDao
 import pl.polsl.stocktakingApp.data.repository.StocktakingRepository
-import pl.polsl.stocktakingApp.domain.usecase.ObserveObjectList
-import pl.polsl.stocktakingApp.domain.usecase.ObserveObjectListImpl
-import pl.polsl.stocktakingApp.domain.usecase.UpsertObject
-import pl.polsl.stocktakingApp.domain.usecase.UpsertObjectImpl
+import pl.polsl.stocktakingApp.domain.usecase.*
 import javax.inject.Singleton
 
 @Module
@@ -52,4 +50,19 @@ object MainModule {
     @Singleton
     fun providesUpsertObjectUseCase(stocktakingRepository: StocktakingRepository): UpsertObject =
         UpsertObjectImpl(stocktakingRepository)
+
+    @Provides
+    @Singleton
+    fun providesOutputBluetoothService(@ApplicationContext context: Context): OutputBluetoothService =
+        OutputBluetoothService(context)
+
+    @Provides
+    @Singleton
+    fun providesGetBondedDevicesUseCase(outputBluetoothService: OutputBluetoothService): GetBondedDevices =
+        GetBondedDevicesImpl(outputBluetoothService)
+
+    @Provides
+    @Singleton
+    fun providesBluetoothConnectionUseCase(outputBluetoothService: OutputBluetoothService): ProvideBluetoothConnection =
+        ProvideBluetoothConnectionImpl(outputBluetoothService)
 }

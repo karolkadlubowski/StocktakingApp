@@ -81,3 +81,19 @@ val Typography.inputField: TextStyle
         fontWeight = FontWeight.Normal,
         fontSize = 22.sp,
     )
+
+val Typography.itemHeader: TextStyle
+    @Composable
+    get() = TextStyle(
+        color = Color.White,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+    )
+
+val Typography.itemDescription: TextStyle
+    @Composable
+    get() = TextStyle(
+        color = Color.White,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+    )

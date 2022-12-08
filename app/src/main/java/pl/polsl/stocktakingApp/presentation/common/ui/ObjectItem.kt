@@ -21,7 +21,7 @@ fun ObjectItem(stocktakingObject: StocktakingObject) {
             D.EmptyButton.borderStroke,
             C.BorderGrey
         ),
-        shape = Shape.rounded,
+        shape = S.rounded,
         shadowElevation = D.Elevation.default,
         modifier = Modifier
             .fillMaxWidth()

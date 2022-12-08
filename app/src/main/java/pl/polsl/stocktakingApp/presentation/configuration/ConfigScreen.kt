@@ -1,15 +1,13 @@
 package pl.polsl.stocktakingApp.presentation.configuration
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
@@ -32,9 +30,13 @@ fun ConfigScreen(
 ) {
     val state by viewModel.observeState()
 
+    LaunchedEffect(key1 = "initBluetooth") {
+        viewModel.updateListOfBondedDevices()
+    }
+
     var regex = remember { mutableStateOf(TextFieldValue("")) }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(
@@ -47,46 +49,56 @@ fun ConfigScreen(
             )
             .padding(16.dp)
     ) {
-
-        Text(
-            "Konfiguracja",
-            style = MaterialTheme.typography.pageTitle,
-            modifier = Modifier
-                .padding(vertical = 10.dp)
-        )
-
-        InputField(
-            value = regex.value,
-            onValueChange = { regex.value = it },
-            description = "Przykładowy numer"
-        )
-
-        Text(
-            text = "Rodzaj etykiety",
-            style = MaterialTheme.typography.inputFieldHeader,
-            modifier = Modifier.padding(
-                bottom = 6.dp,
-                top = 10.dp
+        item {
+            Text(
+                "Konfiguracja",
+                style = MaterialTheme.typography.pageTitle,
+                modifier = Modifier
+                    .padding(vertical = 10.dp)
             )
-        )
 
-        FilterSwitcher(
-            //modifier = Modifier.padding(horizontal = D.Padding.rippleSmall),
-            selectedTabIndex = state.codeType.ordinal,
-            tabs = CodeType.values()
-                .map { stringResource(id = it.stringId) },
-        ) {
-            viewModel.changeCodeType(CodeType.values()[it])
+            InputField(
+                value = regex.value,
+                onValueChange = { regex.value = it },
+                description = "Przykładowy numer"
+            )
+
+            Text(
+                text = "Rodzaj etykiety",
+                style = MaterialTheme.typography.inputFieldHeader,
+                modifier = Modifier.padding(
+                    bottom = 6.dp,
+                    top = 10.dp
+                )
+            )
+
+            FilterSwitcher(
+                //modifier = Modifier.padding(horizontal = D.Padding.rippleSmall),
+                selectedTabIndex = state.codeType.ordinal,
+                tabs = CodeType.values()
+                    .map { stringResource(id = it.stringId) },
+            ) {
+                viewModel.changeCodeType(CodeType.values()[it])
+            }
+
+            Text(
+                text = "Urządzenie bluetooth",
+                style = MaterialTheme.typography.inputFieldHeader,
+                modifier = Modifier.padding(
+                    bottom = 6.dp,
+                    top = 10.dp
+                )
+            )
         }
 
-        Text(
-            text = "Urządzenie bluetooth",
-            style = MaterialTheme.typography.inputFieldHeader,
-            modifier = Modifier.padding(
-                bottom = 6.dp,
-                top = 10.dp
-            )
-        )
+        items(
+            items = state.bluetoothDeviceList,
+            key = { it.address }
+        ) {
+            DeviceItem(bluetoothDevice = it, isChecked = false, onCheckClick = {
+                viewModel.changeSelectedDevice(it)
+            })
+        }
     }
 }
 
