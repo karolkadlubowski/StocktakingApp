@@ -95,9 +95,12 @@ fun ConfigScreen(
             items = state.bluetoothDeviceList,
             key = { it.address }
         ) {
-            DeviceItem(bluetoothDevice = it, isChecked = false, onCheckClick = {
-                viewModel.changeSelectedDevice(it)
-            })
+            DeviceItem(
+                bluetoothDevice = it,
+                isChecked = state.selectedPrinterAddress == it.address,
+                onCheckClick = {
+                    viewModel.changeSelectedDevice(it)
+                })
         }
     }
 }

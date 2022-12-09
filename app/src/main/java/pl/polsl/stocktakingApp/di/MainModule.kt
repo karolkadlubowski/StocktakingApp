@@ -1,6 +1,11 @@
 package pl.polsl.stocktakingApp.di
 
 import android.content.Context
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
@@ -8,11 +13,16 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import pl.polsl.printer.OutputBluetoothService
 import pl.polsl.stocktakingApp.data.Database
 import pl.polsl.stocktakingApp.data.dao.StocktakingDao
 import pl.polsl.stocktakingApp.data.repository.StocktakingRepository
+import pl.polsl.stocktakingApp.data.settings.SETTINGS_NAME
+import pl.polsl.stocktakingApp.data.settings.Settings
+import pl.polsl.stocktakingApp.data.settings.SettingsImpl
 import pl.polsl.stocktakingApp.domain.usecase.*
 import javax.inject.Singleton
 
@@ -65,4 +75,53 @@ object MainModule {
     @Singleton
     fun providesBluetoothConnectionUseCase(outputBluetoothService: OutputBluetoothService): ProvideBluetoothConnection =
         ProvideBluetoothConnectionImpl(outputBluetoothService)
+
+    @Singleton
+    @Provides
+    fun providesSettings(@ApplicationContext appContext: Context): Settings = SettingsImpl(
+        PreferenceDataStoreFactory.create(
+            corruptionHandler = ReplaceFileCorruptionHandler(
+                produceNewData = { emptyPreferences() }
+            ),
+            migrations = listOf(
+                SharedPreferencesMigration(
+                    appContext,
+                    SETTINGS_NAME
+                )
+            ),
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+            produceFile = { appContext.preferencesDataStoreFile(SETTINGS_NAME) },
+        ),
+    )
+
+    @Provides
+    @Singleton
+    fun providesSetLabelCodeType(settings: Settings): SetLabelCodeType =
+        SetLabelCodeTypeImpl(settings)
+
+    @Provides
+    @Singleton
+    fun providesGetLabelCodeType(settings: Settings): GetLabelCodeType =
+        GetLabelCodeTypeImpl(settings)
+
+    @Provides
+    @Singleton
+    fun providesObserveLabelCodeType(settings: Settings): ObserveLabelCodeType =
+        ObserveLabelCodeTypeImpl(settings)
+
+
+    @Provides
+    @Singleton
+    fun providesGetSelectedPrinter(settings: Settings): GetSelectedPrinter =
+        GetSelectedPrinterImpl(settings)
+
+    @Provides
+    @Singleton
+    fun providesSaveSelectedPrinter(settings: Settings): SaveSelectedPrinter =
+        SaveSelectedPrinterImpl(settings)
+
+    @Provides
+    @Singleton
+    fun providesObserveSelectedPrinter(settings: Settings): ObserveSelectedPrinter =
+        ObserveSelectedPrinterImpl(settings)
 }

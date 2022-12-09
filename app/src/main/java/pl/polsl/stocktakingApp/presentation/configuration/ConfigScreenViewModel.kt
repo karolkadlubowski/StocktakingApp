@@ -2,42 +2,57 @@ package pl.polsl.stocktakingApp.presentation.configuration
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import pl.polsl.printer.DataResult
 import pl.polsl.printer.Result
 import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.data.models.BluetoothDevice
-import pl.polsl.stocktakingApp.domain.usecase.GetBondedDevices
-import pl.polsl.stocktakingApp.domain.usecase.ProvideBluetoothConnection
+import pl.polsl.stocktakingApp.domain.usecase.*
 import pl.polsl.stocktakingApp.presentation.common.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class ConfigScreenViewModel @Inject constructor(
+    private val _saveSelectedPrinter: SaveSelectedPrinter,
     private val _provideBluetoothConnection: ProvideBluetoothConnection,
     private val _getBondedDevices: GetBondedDevices,
+    private val _setLabelCodeType: SetLabelCodeType,
+    _observeSelectedPrinter: ObserveSelectedPrinter,
+    _observeLabelCodeType: ObserveLabelCodeType,
     _coroutineDispatcher: CoroutineDispatcher
 ) : BaseViewModel<ConfigScreenState>(_coroutineDispatcher) {
     override val initialState: ConfigScreenState = ConfigScreenState.InitialState()
-    override val _state: MutableStateFlow<ConfigScreenState> =
-        MutableStateFlow(initialState)
 
     private val _bondedDeviceList: MutableStateFlow<List<BluetoothDevice>> = MutableStateFlow(
         listOf()
     )
 
-    //private val _codeType: Flow<CodeType> = _observeLabelCodeTypeUseCase(Unit)
+    private val _codeType: Flow<CodeType> = _observeLabelCodeType(Unit)
 
+    private val _selectedPrinterAddress: Flow<String?> = _observeSelectedPrinter(Unit)
 
-    fun changeCodeType(codeType: CodeType) {
-        _state.value = ConfigScreenState.InitialState(codeType)
+    override val _state: Flow<ConfigScreenState> = combine(
+        flow = _codeType,
+        flow2 = _selectedPrinterAddress,
+        flow3 = _bondedDeviceList,
+    ) { codeType, selectedPrinterAddress, bondedDeviceList ->
+        ConfigScreenState.ReadyState(
+            codeType,
+            bondedDeviceList,
+            selectedPrinterAddress,
+        )
     }
 
-    fun changeSelectedDevice(device: BluetoothDevice) {
-        _state.value =
-            (_state.value as ConfigScreenState.InitialState).copy(selectedPrinterAddress = device.address)
+
+    fun changeCodeType(codeType: CodeType) = launch {
+        _setLabelCodeType(codeType)
     }
+
+    fun changeSelectedDevice(device: BluetoothDevice) =
+        launch { _saveSelectedPrinter(SaveSelectedPrinter.Params(device.address)) }
 
     suspend fun updateListOfBondedDevices() {
         try {
