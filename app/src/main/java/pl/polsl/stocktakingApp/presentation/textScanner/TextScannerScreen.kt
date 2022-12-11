@@ -14,7 +14,7 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import pl.polsl.stocktakingApp.common.observeState
+import pl.polsl.stocktakingApp.presentation.common.observeState
 import pl.polsl.stocktakingApp.presentation.destinations.ModifyObjectScreenDestination
 
 @Destination

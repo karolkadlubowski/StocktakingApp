@@ -1,7 +1,5 @@
 package pl.polsl.stocktakingApp.presentation.common
 
-import android.content.Context
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
@@ -52,11 +50,5 @@ abstract class BaseViewModel<out STATE>(protected val defaultDispatcher: Corouti
         jobs.forEach { it.cancel() }
         jobs.clear()
         super.onCleared()
-    }
-
-    open class Event {
-        data class Message(@StringRes private val textId: Int) : Event() {
-            fun text(context: Context): String = context.getString(textId)
-        }
     }
 }

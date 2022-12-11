@@ -12,6 +12,7 @@ import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.data.models.BluetoothDevice
 import pl.polsl.stocktakingApp.domain.usecase.*
 import pl.polsl.stocktakingApp.presentation.common.BaseViewModel
+import pl.polsl.stocktakingApp.presentation.common.Event
 import javax.inject.Inject
 
 @HiltViewModel

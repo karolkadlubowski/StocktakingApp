@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.presentation.common.BaseViewModel
+import pl.polsl.stocktakingApp.presentation.common.Event
 import javax.inject.Inject
 
 

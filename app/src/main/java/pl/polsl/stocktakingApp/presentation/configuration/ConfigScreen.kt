@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import pl.polsl.stocktakingApp.common.observeState
+import pl.polsl.stocktakingApp.presentation.common.observeState
 import pl.polsl.stocktakingApp.presentation.common.ui.FilterSwitcher
 import pl.polsl.stocktakingApp.presentation.common.ui.InputField
 import pl.polsl.stocktakingApp.ui.theme.inputFieldHeader

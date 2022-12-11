@@ -9,4 +9,5 @@
     <string name="qrLabel">Kod QR</string>
     <string name="getBondedDevicesError">Nie można pobrać listy sparowanych urządzeń</string>
     <string name="bluetoothEnablingError">Wystąpił błąd podczas uruchamiania bluetooth</string>
+    <string name="printLabelError">Wystąpił błąd podczas drukowania etykiety</string>
 </resources>
