@@ -19,4 +19,9 @@ object D {
     object Elevation {
         val default = 12.dp
     }
+
+    object FilterSwitcher {
+        val paddingBottom = 28.dp
+        val height = 56.dp
+    }
 }

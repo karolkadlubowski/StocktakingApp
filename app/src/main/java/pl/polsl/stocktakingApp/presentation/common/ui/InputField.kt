@@ -27,7 +27,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import pl.polsl.stocktakingApp.ui.theme.*
+import pl.polsl.stocktakingApp.ui.theme.C
+import pl.polsl.stocktakingApp.ui.theme.S
+import pl.polsl.stocktakingApp.ui.theme.inputField
+import pl.polsl.stocktakingApp.ui.theme.inputFieldHeader
 
 @Composable
 fun InputField(
@@ -56,7 +59,6 @@ fun InputField(
 
         Surface(
             shape = S.rounded,
-            shadowElevation = D.Elevation.default,
             border = border,
             modifier = Modifier
                 .clickable(

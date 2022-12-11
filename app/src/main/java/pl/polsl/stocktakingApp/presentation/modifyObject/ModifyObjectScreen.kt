@@ -33,10 +33,10 @@ import pl.polsl.stocktakingApp.ui.theme.pageTitle
 fun ModifyObjectScreen(
     navigator: DestinationsNavigator,
     viewModel: ModifyObjectScreenViewModel = hiltViewModel(),
-    objectId: String? = null,
+    barcode: String? = null,
     stocktakingObject: StocktakingObject? = null
 ) {
-    var id = remember { mutableStateOf(TextFieldValue(objectId ?: "")) }
+    var barcode = remember { mutableStateOf(TextFieldValue(barcode ?: "")) }
     var name = remember { mutableStateOf(TextFieldValue("")) }
     var description = remember { mutableStateOf(TextFieldValue("")) }
     var amount = remember { mutableStateOf(TextFieldValue("1")) }
@@ -68,7 +68,11 @@ fun ModifyObjectScreen(
         )
 
         InputField(value = name.value, onValueChange = { name.value = it }, description = "Nazwa")
-        InputField(value = id.value, onValueChange = { id.value = it }, description = "Id")
+        InputField(
+            value = barcode.value,
+            onValueChange = { barcode.value = it },
+            description = "Kod"
+        )
         InputField(
             value = description.value,
             onValueChange = { description.value = it },
@@ -86,10 +90,11 @@ fun ModifyObjectScreen(
             onClick = {
                 viewModel.upsertObject(
                     StocktakingObject(
-                        id.value.text,
+                        null,
                         name.value.text,
                         description.value.text,
-                        amount.value.text.toInt()
+                        amount.value.text.toInt(),
+                        barcode.value.text
                     )
                 )
                 navigator.popBackStack(ListScreenDestination, false)
