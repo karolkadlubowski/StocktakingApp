@@ -23,7 +23,11 @@ import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.ui.theme.*
 
 @Composable
-fun ObjectItem(stocktakingObject: StocktakingObject, onPrintButtonClicked: () -> Unit) {
+fun ObjectItem(
+    stocktakingObject: StocktakingObject,
+    onPrintButtonClicked: () -> Unit,
+    onClicked: () -> Unit
+) {
     Surface(
         border = BorderStroke(
             D.EmptyButton.borderStroke,
@@ -33,6 +37,9 @@ fun ObjectItem(stocktakingObject: StocktakingObject, onPrintButtonClicked: () ->
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 10.dp)
+            .clickable {
+                onClicked()
+            }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(5.dp)) {
             Column(modifier = Modifier.weight(1f)) {
@@ -73,6 +80,6 @@ fun ObjectItem(stocktakingObject: StocktakingObject, onPrintButtonClicked: () ->
 @Composable
 private fun ObjectItemPreview() {
     StocktakingAppTheme {
-        ObjectItem(stocktakingObject = StocktakingObject(1, "Lodówka", "", 2, "BK-1053320")) {}
+        ObjectItem(stocktakingObject = StocktakingObject(1, "Lodówka", "", 2, "BK-1053320"), {}) {}
     }
 }

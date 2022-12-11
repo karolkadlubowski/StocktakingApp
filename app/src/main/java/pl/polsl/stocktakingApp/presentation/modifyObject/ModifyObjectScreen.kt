@@ -10,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -33,13 +34,27 @@ import pl.polsl.stocktakingApp.ui.theme.pageTitle
 fun ModifyObjectScreen(
     navigator: DestinationsNavigator,
     viewModel: ModifyObjectScreenViewModel = hiltViewModel(),
-    barcode: String? = null,
+    code: String? = null,
     stocktakingObject: StocktakingObject? = null
 ) {
-    var barcode = remember { mutableStateOf(TextFieldValue(barcode ?: "")) }
-    var name = remember { mutableStateOf(TextFieldValue("")) }
-    var description = remember { mutableStateOf(TextFieldValue("")) }
-    var amount = remember { mutableStateOf(TextFieldValue("1")) }
+    val name = remember { mutableStateOf(TextFieldValue("")) }
+    val barcode = remember { mutableStateOf(TextFieldValue("")) }
+    val description =
+        remember { mutableStateOf(TextFieldValue("")) }
+    val amount =
+        remember { mutableStateOf(TextFieldValue("1")) }
+
+    LaunchedEffect(key1 = "init", block = {
+        viewModel.init(stocktakingObject)
+        if (stocktakingObject != null) {
+            name.value = TextFieldValue(stocktakingObject.name)
+            barcode.value = TextFieldValue(stocktakingObject.barcode)
+            description.value = TextFieldValue(stocktakingObject.description)
+            amount.value = TextFieldValue(stocktakingObject.amount.toString())
+        } else if (code != null) {
+            barcode.value = TextFieldValue(code)
+        }
+    })
 
     val screenMode: ObjectModificationMode = remember {
         if (stocktakingObject != null) ObjectModificationMode.EditMode else ObjectModificationMode.AddMode
@@ -64,39 +79,50 @@ fun ModifyObjectScreen(
             style = MaterialTheme.typography.pageTitle,
             modifier = Modifier
                 .padding(vertical = 10.dp)
-            //.weight(1f)
         )
 
-        InputField(value = name.value, onValueChange = { name.value = it }, description = "Nazwa")
+        InputField(
+            value = name.value,
+            onValueChange = {
+                name.value = it
+
+                viewModel.setName(it.text)
+
+            },
+            description = "Nazwa"
+        )
         InputField(
             value = barcode.value,
-            onValueChange = { barcode.value = it },
+            onValueChange = {
+                barcode.value = it
+                viewModel.setBarcode(it.text)
+
+            },
             description = "Kod"
         )
         InputField(
             value = description.value,
-            onValueChange = { description.value = it },
+            onValueChange = {
+                description.value = it
+                viewModel.setDescription(it.text)
+
+            },
             description = "Opis",
             singleLine = false
         )
         InputField(
             value = amount.value,
-            onValueChange = { amount.value = it },
+            onValueChange = {
+                amount.value = it
+                viewModel.setAmount(it.text.toInt())
+            },
             description = "Ilość",
             keyboardOptions = KeyboardOptions().copy(keyboardType = KeyboardType.Number)
         )
 
         Button(
             onClick = {
-                viewModel.upsertObject(
-                    StocktakingObject(
-                        null,
-                        name.value.text,
-                        description.value.text,
-                        amount.value.text.toInt(),
-                        barcode.value.text
-                    )
-                )
+                viewModel.upsertObject()
                 navigator.popBackStack(ListScreenDestination, false)
             }, modifier = Modifier.padding(top = 20.dp)
         ) {
@@ -106,29 +132,8 @@ fun ModifyObjectScreen(
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .fillMaxWidth(),
-                //.height(40.dp),
                 style = MaterialTheme.typography.captionButton
             )
         }
-
-//        FilledButton(onClick = { /*TODO*/ }) {
-//            Text(
-//                textAlign = TextAlign.Center,
-//                text = "Akceptuj",
-//                modifier = Modifier
-//                    .fillMaxSize(),
-//                style = MaterialTheme.typography.captionButton
-//            )
-//        }
-
-//        Row {
-//            Button(onClick = {}) {
-//                Text(text = "Akceptuj")
-//            }
-//
-//            Button(onClick = { }) {
-//                Text(text = "Anuluj")
-//            }
-//        }
     }
 }
