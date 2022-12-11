@@ -153,7 +153,7 @@ fun ListScreen(
                 if (state is ListScreenState.ReadyState) {
                     items(
                         items = (state as ListScreenState.ReadyState).list,
-                        key = { it.id }
+                        key = { it.id!! }
                     ) {
                         ObjectItem(stocktakingObject = it)
                     }

@@ -6,8 +6,9 @@ import androidx.room.PrimaryKey
 @Entity
 data class StocktakingObject(
     @PrimaryKey
-    val id: String,
+    val id: Int?,
     val name: String,
     val description: String,
-    val amount: Int
+    val amount: Int,
+    val barcode: String
 )

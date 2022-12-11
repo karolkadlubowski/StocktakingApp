@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.ui.theme.*
@@ -22,7 +23,6 @@ fun ObjectItem(stocktakingObject: StocktakingObject) {
             C.BorderGrey
         ),
         shape = S.rounded,
-        shadowElevation = D.Elevation.default,
         modifier = Modifier
             .fillMaxWidth()
             .background(C.Transparent)
@@ -35,9 +35,16 @@ fun ObjectItem(stocktakingObject: StocktakingObject) {
                 modifier = Modifier.padding(bottom = 5.dp)
             )
 
-            Text(text = stocktakingObject.id, style = MaterialTheme.typography.cardDescription)
+            Text(text = stocktakingObject.barcode, style = MaterialTheme.typography.cardDescription)
 
         }
     }
+}
 
+@Preview(showBackground = true)
+@Composable
+private fun ObjectItemPreview() {
+    StocktakingAppTheme {
+        ObjectItem(stocktakingObject = StocktakingObject(1, "Lodówka", "", 2, "BK-1053320"))
+    }
 }

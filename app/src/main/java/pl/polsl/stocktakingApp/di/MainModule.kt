@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import pl.polsl.printer.LabelLineDividerService
 import pl.polsl.printer.OutputBluetoothService
 import pl.polsl.stocktakingApp.data.Database
 import pl.polsl.stocktakingApp.data.dao.StocktakingDao
@@ -124,4 +125,15 @@ object MainModule {
     @Singleton
     fun providesObserveSelectedPrinter(settings: Settings): ObserveSelectedPrinter =
         ObserveSelectedPrinterImpl(settings)
+
+    @Provides
+    @Singleton
+    fun providesLabelLineDividerService(): LabelLineDividerService = LabelLineDividerService()
+
+    @Provides
+    @Singleton
+    fun providesPrintLabel(
+        outputBluetoothService: OutputBluetoothService,
+        labelLineDividerService: LabelLineDividerService
+    ): PrintLabel = PrintLabelImpl(outputBluetoothService, labelLineDividerService)
 }
