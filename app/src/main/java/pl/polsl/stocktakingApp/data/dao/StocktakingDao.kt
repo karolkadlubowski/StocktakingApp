@@ -13,7 +13,7 @@ interface StocktakingDao {
     suspend fun upsert(stocktakingObject: StocktakingObject)
 
     @Delete
-    suspend fun delete(stocktakingObject: StocktakingObject): Int
+    suspend fun delete(stocktakingObject: StocktakingObject)
 
     @Query("SELECT * FROM stocktakingObject")
     fun observeAll(): Flow<List<StocktakingObject>>

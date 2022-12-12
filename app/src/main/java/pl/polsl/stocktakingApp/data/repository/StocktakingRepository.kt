@@ -21,4 +21,8 @@ class StocktakingRepository(
     suspend fun upsertObject(stocktakingObject: StocktakingObject) {
         return _stocktakingDao.upsert(stocktakingObject)
     }
+
+    suspend fun deleteObject(stocktakingObject: StocktakingObject) {
+        _stocktakingDao.delete(stocktakingObject)
+    }
 }
