@@ -136,4 +136,9 @@ object MainModule {
         outputBluetoothService: OutputBluetoothService,
         labelLineDividerService: LabelLineDividerService
     ): PrintLabel = PrintLabelImpl(outputBluetoothService, labelLineDividerService)
+
+    @Provides
+    @Singleton
+    fun providesDeleteObject(stocktakingRepository: StocktakingRepository): DeleteObject =
+        DeleteObjectImpl(stocktakingRepository)
 }

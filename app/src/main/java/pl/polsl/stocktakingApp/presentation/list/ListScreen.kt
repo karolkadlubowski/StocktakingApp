@@ -145,31 +145,10 @@ fun ListScreen(
                     )
 
                 }
-
-                //            var list = remember {
-                //                listOf(
-                //                    StocktakingObject("ST-13771", "Komputer stacj", "blabla", 7),
-                //                    StocktakingObject("ST-13772", "Komputer stacj", "blabla", 7),
-                //                    StocktakingObject("ST-13773", "Komputer stacj", "blabla", 7),
-                //                    StocktakingObject("ST-13774", "Komputer stacj", "blabla", 7),
-                //                    StocktakingObject("ST-13775", "Komputer stacj", "blabla", 7),
-                //                    StocktakingObject("ST-13776", "Komputer stacj", "blabla", 7),
-                //                    StocktakingObject("ST-13777", "Komputer stacj", "blabla", 7),
-                //                )
-                //            }
-
-                //Scaffold(modifier = Modifier) {
                 LazyColumn(
                     Modifier
                         .fillMaxSize()
                 ) {
-
-                    //                LazyListScope.items<StocktakingObject>(
-                    //                    items = list,
-                    //                    key = { it.id }
-                    //                ) {
-                    //
-                    //                }
                     if (state is ListScreenState.ReadyState) {
                         items(
                             items = (state as ListScreenState.ReadyState).list,
@@ -177,6 +156,8 @@ fun ListScreen(
                         ) {
                             ObjectItem(stocktakingObject = it, onPrintButtonClicked = {
                                 viewModel.printLabel(it)
+                            }, onClicked = {
+                                navigator.navigate(ModifyObjectScreenDestination(stocktakingObject = it))
                             })
                         }
                     }
@@ -185,12 +166,4 @@ fun ListScreen(
             }
         }
     }
-
-
-//        EmptyButton(text = "Go to Config Screen") {
-//            navigator.navigate(ConfigScreenDestination)
-//        }
-
-
-    // }
 }
