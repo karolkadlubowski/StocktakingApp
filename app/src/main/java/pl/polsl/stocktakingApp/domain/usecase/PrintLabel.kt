@@ -1,7 +1,7 @@
 package pl.polsl.stocktakingApp.domain.usecase
 
+import pl.polsl.printer.BluetoothService
 import pl.polsl.printer.LabelLineDividerService
-import pl.polsl.printer.OutputBluetoothService
 import pl.polsl.printer.Result
 import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.domain.UseCase
@@ -16,7 +16,7 @@ interface PrintLabel : UseCase<PrintLabel.Params, Result> {
 }
 
 internal class PrintLabelImpl(
-    private val outputBluetoothService: OutputBluetoothService,
+    private val bluetoothService: BluetoothService,
     private val labelLineDividerService: LabelLineDividerService
 ) : PrintLabel {
     override fun invoke(input: PrintLabel.Params): Result {
@@ -69,6 +69,6 @@ internal class PrintLabelImpl(
                 append("^XZ\n")
             }
         }
-        return outputBluetoothService.print(input.deviceAddress, label)
+        return bluetoothService.print(input.deviceAddress, label)
     }
 }

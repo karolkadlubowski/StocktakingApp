@@ -16,8 +16,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import pl.polsl.printer.BluetoothService
 import pl.polsl.printer.LabelLineDividerService
-import pl.polsl.printer.OutputBluetoothService
 import pl.polsl.stocktakingApp.data.Database
 import pl.polsl.stocktakingApp.data.dao.StocktakingDao
 import pl.polsl.stocktakingApp.data.repository.StocktakingRepository
@@ -64,18 +64,18 @@ object MainModule {
 
     @Provides
     @Singleton
-    fun providesOutputBluetoothService(@ApplicationContext context: Context): OutputBluetoothService =
-        OutputBluetoothService(context)
+    fun providesBluetoothService(@ApplicationContext context: Context): BluetoothService =
+        BluetoothService(context)
 
     @Provides
     @Singleton
-    fun providesGetBondedDevicesUseCase(outputBluetoothService: OutputBluetoothService): GetBondedDevices =
-        GetBondedDevicesImpl(outputBluetoothService)
+    fun providesGetBondedDevicesUseCase(bluetoothService: BluetoothService): GetBondedDevices =
+        GetBondedDevicesImpl(bluetoothService)
 
     @Provides
     @Singleton
-    fun providesBluetoothConnectionUseCase(outputBluetoothService: OutputBluetoothService): ProvideBluetoothConnection =
-        ProvideBluetoothConnectionImpl(outputBluetoothService)
+    fun providesBluetoothConnectionUseCase(bluetoothService: BluetoothService): ProvideBluetoothConnection =
+        ProvideBluetoothConnectionImpl(bluetoothService)
 
     @Singleton
     @Provides
@@ -133,9 +133,9 @@ object MainModule {
     @Provides
     @Singleton
     fun providesPrintLabel(
-        outputBluetoothService: OutputBluetoothService,
+        bluetoothService: BluetoothService,
         labelLineDividerService: LabelLineDividerService
-    ): PrintLabel = PrintLabelImpl(outputBluetoothService, labelLineDividerService)
+    ): PrintLabel = PrintLabelImpl(bluetoothService, labelLineDividerService)
 
     @Provides
     @Singleton

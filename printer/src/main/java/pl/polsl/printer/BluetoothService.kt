@@ -18,7 +18,7 @@ import kotlinx.coroutines.delay
 import timber.log.Timber
 import java.io.IOException
 
-class OutputBluetoothService(
+class BluetoothService(
     private val context: Context
 ) {
     private val _bluetoothAdapter: BluetoothAdapter =
