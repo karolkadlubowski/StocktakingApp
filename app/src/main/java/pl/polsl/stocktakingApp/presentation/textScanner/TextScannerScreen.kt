@@ -45,7 +45,8 @@ fun TextScannerScreen(
     when (state) {
         is TextScannerScreenState.Scanning -> MLKitTextRecognition(
             onTakePhoto = viewModel::onPhotoTaken,
-            textRecognizer = textRecognizer
+            textRecognizer = textRecognizer,
+            onTextRecognized = viewModel::onIdFound
         )
         is TextScannerScreenState.Cropping -> {
             imageCropLauncher.launch(

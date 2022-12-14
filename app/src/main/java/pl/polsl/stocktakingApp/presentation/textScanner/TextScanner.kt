@@ -34,7 +34,8 @@ import java.util.concurrent.Executors
 @Composable
 fun MLKitTextRecognition(
     onTakePhoto: (Uri) -> Unit,
-    textRecognizer: TextRecognizer
+    textRecognizer: TextRecognizer,
+    onTextRecognized: (String) -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -51,7 +52,7 @@ fun MLKitTextRecognition(
         TextRecognitionView(
             context = context,
             lifecycleOwner = lifecycleOwner,
-            extractedText = extractedText,
+            onTextRecognized = onTextRecognized,
             onTakePhoto = onTakePhoto,
             imageCapture = imageCapture,
             textRecognizer = textRecognizer
@@ -86,7 +87,7 @@ fun MLKitTextRecognition(
 fun TextRecognitionView(
     context: Context,
     lifecycleOwner: LifecycleOwner,
-    extractedText: MutableState<String>,
+    onTextRecognized: (String) -> Unit,
     onTakePhoto: (Uri) -> Unit,
     imageCapture: ImageCapture,
     textRecognizer: TextRecognizer
@@ -111,7 +112,7 @@ fun TextRecognitionView(
                         .apply {
                             setAnalyzer(
                                 cameraExecutor,
-                                ObjectDetectorImageAnalyzer(textRecognizer, extractedText)
+                                ObjectDetectorImageAnalyzer(textRecognizer, onTextRecognized)
                             )
                         }
                     val cameraSelector = CameraSelector.Builder()

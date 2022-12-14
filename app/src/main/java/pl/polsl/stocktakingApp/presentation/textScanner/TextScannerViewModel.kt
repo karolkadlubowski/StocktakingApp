@@ -28,6 +28,10 @@ class TextScannerScreenViewModel @Inject constructor(
         _state.value = TextScannerScreenState.Cropping(photoUri)
     }
 
+    fun onIdFound(id: String) {
+        _state.value = TextScannerScreenState.Found(id)
+    }
+
 //    fun onPhotoCropped(photoUri: Uri) {
 //        val result = analyzePhoto(photoUri)
 //
