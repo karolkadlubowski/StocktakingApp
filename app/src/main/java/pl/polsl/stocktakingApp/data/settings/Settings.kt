@@ -25,6 +25,12 @@ interface Settings {
     suspend fun getLabelCodeType(): CodeType
 
     fun observeLabelCodeType(): Flow<CodeType>
+
+    suspend fun setExampleNumber(number: String)
+
+    fun observeExampleNumber(): Flow<String?>
+
+    suspend fun setExampleNumberRegex(regex: String)
 }
 
 internal class SettingsImpl(private val _dataStore: DataStore<Preferences>) : Settings {
@@ -32,6 +38,8 @@ internal class SettingsImpl(private val _dataStore: DataStore<Preferences>) : Se
     companion object {
         private val SELECTED_PRINTER = stringPreferencesKey("selectedPrinter")
         private val LABEL_CODE_TYPE = intPreferencesKey("labelCodeType")
+        private val EXAMPLE_NUMBER = stringPreferencesKey("exampleNumber")
+        private val REGEX = stringPreferencesKey("regex")
     }
 
     override suspend fun setSelectedPrinter(deviceAddress: String) = _dataStore.set(
@@ -54,6 +62,12 @@ internal class SettingsImpl(private val _dataStore: DataStore<Preferences>) : Se
 
     override fun observeLabelCodeType(): Flow<CodeType> =
         _dataStore.data.map { CodeType.values()[it[LABEL_CODE_TYPE] ?: 1] }
+
+    override suspend fun setExampleNumber(number: String) = _dataStore.set(EXAMPLE_NUMBER, number)
+
+    override fun observeExampleNumber(): Flow<String?> = _dataStore.data.map { it[EXAMPLE_NUMBER] }
+
+    override suspend fun setExampleNumberRegex(regex: String) = _dataStore.set(REGEX, regex)
 
     private suspend fun <T> DataStore<Preferences>.set(key: Preferences.Key<T>, value: T) {
         this.edit { it[key] = value }

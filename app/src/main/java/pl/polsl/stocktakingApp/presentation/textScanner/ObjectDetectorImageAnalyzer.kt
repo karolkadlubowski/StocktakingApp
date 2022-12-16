@@ -1,6 +1,7 @@
 package pl.polsl.stocktakingApp.presentation.textScanner
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.mlkit.vision.common.InputImage
@@ -18,10 +19,10 @@ class ObjectDetectorImageAnalyzer(
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
 
 
-            val text = "STA-0000046 STA-0000046"
-
-            val r = "[a-zA-Z][a-zA-Z][a-zA-Z]-\\d\\d\\d\\d\\d\\d\\d".toRegex()
-            val matches = r.findAll(text)
+//            val text = "STA-0000046 STA-0000046"
+//
+//            val r = "[a-zA-Z][a-zA-Z][a-zA-Z]-\\d\\d\\d\\d\\d\\d\\d".toRegex()
+//            val matches = r.findAll(text)
 
 //            val data = matches.map { it.value }
 //                .groupBy { it }
@@ -38,8 +39,16 @@ class ObjectDetectorImageAnalyzer(
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         val foundString = it.result?.text ?: ""
+                        Log.i("messer", foundString)
                         if (!foundString.isNullOrEmpty()) {
-                            val foundPattern = regex.find(foundString)
+                            var foundPattern = regex.find(foundString)
+
+//                            if(foundPattern==null){
+//                                val editedString = foundString.replace('D','0')
+//                                val editedString2 = editedString.replace('O','0')
+//                                foundPattern = regex.find(editedString2)
+//                            }
+
                             if (foundPattern != null) {
                                 onRegexFound(foundPattern.value)
                             }

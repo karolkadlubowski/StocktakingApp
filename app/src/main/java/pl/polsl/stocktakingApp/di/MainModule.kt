@@ -141,4 +141,14 @@ object MainModule {
     @Singleton
     fun providesDeleteObject(stocktakingRepository: StocktakingRepository): DeleteObject =
         DeleteObjectImpl(stocktakingRepository)
+
+    @Provides
+    @Singleton
+    fun providesSetExampleNumber(settings: Settings): SetExampleNumber =
+        SetExampleNumberImpl(settings)
+
+    @Provides
+    @Singleton
+    fun providesObserveExampleNumber(settings: Settings): ObserveExampleNumber =
+        ObserveExampleNumberImpl(settings)
 }

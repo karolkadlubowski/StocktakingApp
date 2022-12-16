@@ -21,6 +21,8 @@ class ConfigScreenViewModel @Inject constructor(
     private val _provideBluetoothConnection: ProvideBluetoothConnection,
     private val _getBondedDevices: GetBondedDevices,
     private val _setLabelCodeType: SetLabelCodeType,
+    private val _setExampleNumber: SetExampleNumber,
+    _observeExampleNumber: ObserveExampleNumber,
     _observeSelectedPrinter: ObserveSelectedPrinter,
     _observeLabelCodeType: ObserveLabelCodeType,
     _coroutineDispatcher: CoroutineDispatcher
@@ -35,15 +37,19 @@ class ConfigScreenViewModel @Inject constructor(
 
     private val _selectedPrinterAddress: Flow<String?> = _observeSelectedPrinter(Unit)
 
+    private val _exampleNumber: Flow<String?> = _observeExampleNumber(Unit)
+
     override val _state: Flow<ConfigScreenState> = combine(
         flow = _codeType,
         flow2 = _selectedPrinterAddress,
         flow3 = _bondedDeviceList,
-    ) { codeType, selectedPrinterAddress, bondedDeviceList ->
+        flow4 = _exampleNumber
+    ) { codeType, selectedPrinterAddress, bondedDeviceList, exampleNumber ->
         ConfigScreenState.ReadyState(
             codeType,
             bondedDeviceList,
             selectedPrinterAddress,
+            exampleNumber
         )
     }
 
@@ -54,6 +60,8 @@ class ConfigScreenViewModel @Inject constructor(
 
     fun changeSelectedDevice(device: BluetoothDevice) =
         launch { _saveSelectedPrinter(SaveSelectedPrinter.Params(device.address)) }
+
+    fun changeExampleNumber(number: String) = launch { _setExampleNumber(number) }
 
     suspend fun updateListOfBondedDevices() {
         try {
@@ -80,20 +88,19 @@ sealed class ConfigScreenState {
     abstract val codeType: CodeType
     abstract val bluetoothDeviceList: List<BluetoothDevice>
     abstract val selectedPrinterAddress: String?
+    abstract val exampleNumber: String?
 
     data class InitialState(
         override val codeType: CodeType = CodeType.QR,
-        override val bluetoothDeviceList: List<BluetoothDevice> = listOf(
-//            BluetoothDevice("Sluchawki", "60:12:77:84"),
-//            BluetoothDevice("Drukarka", "77:60:13:84"),
-//            BluetoothDevice("Lodowka", "4F:12:60:77")
-        ),
-        override val selectedPrinterAddress: String? = null
+        override val bluetoothDeviceList: List<BluetoothDevice> = listOf(),
+        override val selectedPrinterAddress: String? = null,
+        override val exampleNumber: String? = null
     ) : ConfigScreenState()
 
     data class ReadyState(
         override val codeType: CodeType,
         override val bluetoothDeviceList: List<BluetoothDevice>,
-        override val selectedPrinterAddress: String?
+        override val selectedPrinterAddress: String?,
+        override val exampleNumber: String?
     ) : ConfigScreenState()
 }

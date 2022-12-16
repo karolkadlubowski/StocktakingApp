@@ -33,8 +33,14 @@ fun ConfigScreen(
     LaunchedEffect(key1 = "initBluetooth") {
         viewModel.updateListOfBondedDevices()
     }
+    var regex = remember { mutableStateOf(TextFieldValue(state.exampleNumber ?: "")) }
 
-    var regex = remember { mutableStateOf(TextFieldValue("")) }
+    LaunchedEffect(key1 = "init", block = {
+        if (state is ConfigScreenState.ReadyState) {
+            regex.value = TextFieldValue(state.exampleNumber ?: "")
+        }
+    })
+
 
     LazyColumn(
         modifier = Modifier
@@ -59,7 +65,10 @@ fun ConfigScreen(
 
             InputField(
                 value = regex.value,
-                onValueChange = { regex.value = it },
+                onValueChange = {
+                    regex.value = it
+                    viewModel.changeExampleNumber(it.text)
+                },
                 description = "Przykładowy numer"
             )
 
