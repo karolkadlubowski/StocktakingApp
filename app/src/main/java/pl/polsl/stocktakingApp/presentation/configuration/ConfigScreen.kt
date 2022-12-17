@@ -7,11 +7,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -33,14 +34,6 @@ fun ConfigScreen(
     LaunchedEffect(key1 = "initBluetooth") {
         viewModel.updateListOfBondedDevices()
     }
-    var regex = remember { mutableStateOf(TextFieldValue(state.exampleNumber ?: "")) }
-
-    LaunchedEffect(key1 = "init", block = {
-        if (state is ConfigScreenState.ReadyState) {
-            regex.value = TextFieldValue(state.exampleNumber ?: "")
-        }
-    })
-
 
     LazyColumn(
         modifier = Modifier
@@ -64,10 +57,10 @@ fun ConfigScreen(
             )
 
             InputField(
-                value = regex.value,
+                value = state.exampleNumber ?: "",
                 onValueChange = {
-                    regex.value = it
-                    viewModel.changeExampleNumber(it.text)
+                    //regex.value = it
+                    viewModel.changeExampleNumber(it)
                 },
                 description = "Przykładowy numer"
             )
