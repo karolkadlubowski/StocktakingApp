@@ -4,7 +4,7 @@ class RegexService {
     private val letterRegex = "[a-zA-Z]"
     private val digitRegex = "\\d"
 
-    fun rewriteStringToRegex(string: String): Regex {
+    fun rewriteStringToRegex(string: String): String {
         val string = string.filterNot { it.isWhitespace() }
 
         val regexStringBuilder = StringBuilder()
@@ -18,7 +18,8 @@ class RegexService {
                 regexStringBuilder.append(it)
             }
         }
+        val strings = regexStringBuilder.toString()
 
-        return regexStringBuilder.toString().toRegex()
+        return strings
     }
 }

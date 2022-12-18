@@ -121,9 +121,7 @@ sealed class ModifyObjectScreenState {
         override val barcode: String,
         override val description: String,
         override val amount: Int
-    ) : ModifyObjectScreenState() {
-
-    }
+    ) : ModifyObjectScreenState()
 
     data class EditObjectState(
         override val name: String,

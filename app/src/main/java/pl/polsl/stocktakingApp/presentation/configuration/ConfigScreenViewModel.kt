@@ -22,6 +22,7 @@ class ConfigScreenViewModel @Inject constructor(
     private val _getBondedDevices: GetBondedDevices,
     private val _setLabelCodeType: SetLabelCodeType,
     private val _setExampleNumber: SetExampleNumber,
+    private val _setRegex: SetRegex,
     _observeExampleNumber: ObserveExampleNumber,
     _observeSelectedPrinter: ObserveSelectedPrinter,
     _observeLabelCodeType: ObserveLabelCodeType,
@@ -61,7 +62,10 @@ class ConfigScreenViewModel @Inject constructor(
     fun changeSelectedDevice(device: BluetoothDevice) =
         launch { _saveSelectedPrinter(SaveSelectedPrinter.Params(device.address)) }
 
-    fun changeExampleNumber(number: String) = launch { _setExampleNumber(number) }
+    fun changeExampleNumber(number: String) = launch {
+        _setExampleNumber(number)
+        _setRegex(number)
+    }
 
     suspend fun updateListOfBondedDevices() {
         try {

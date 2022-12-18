@@ -31,6 +31,8 @@ interface Settings {
     fun observeExampleNumber(): Flow<String?>
 
     suspend fun setExampleNumberRegex(regex: String)
+
+    fun observeRegex(): Flow<String?>
 }
 
 internal class SettingsImpl(private val _dataStore: DataStore<Preferences>) : Settings {
@@ -63,11 +65,21 @@ internal class SettingsImpl(private val _dataStore: DataStore<Preferences>) : Se
     override fun observeLabelCodeType(): Flow<CodeType> =
         _dataStore.data.map { CodeType.values()[it[LABEL_CODE_TYPE] ?: 1] }
 
-    override suspend fun setExampleNumber(number: String) = _dataStore.set(EXAMPLE_NUMBER, number)
+    override suspend fun setExampleNumber(number: String) {
+        val xd = _dataStore.get(REGEX)
+
+        _dataStore.set(EXAMPLE_NUMBER, number)
+    }
 
     override fun observeExampleNumber(): Flow<String?> = _dataStore.data.map { it[EXAMPLE_NUMBER] }
 
-    override suspend fun setExampleNumberRegex(regex: String) = _dataStore.set(REGEX, regex)
+    override suspend fun setExampleNumberRegex(regex: String) =
+        _dataStore.set(REGEX, regex)
+
+    override fun observeRegex(): Flow<String?> {
+        return _dataStore.data.map { it[REGEX] }
+    }
+
 
     private suspend fun <T> DataStore<Preferences>.set(key: Preferences.Key<T>, value: T) {
         this.edit { it[key] = value }

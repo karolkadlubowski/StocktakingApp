@@ -16,14 +16,20 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pl.polsl.stocktakingApp.presentation.common.observeState
 import pl.polsl.stocktakingApp.presentation.destinations.ModifyObjectScreenDestination
+import java.net.URLDecoder
 
 @Destination
 @Composable
 fun TextScannerScreen(
     navigator: DestinationsNavigator,
-    viewModel: TextScannerScreenViewModel = hiltViewModel()
+    viewModel: TextScannerScreenViewModel = hiltViewModel(),
+    regex: String?
 ) {
     val state by viewModel.observeState()
+
+//    val regex = remember{
+//        URLDecoder.decode(regex,java.nio.charset.StandardCharsets.UTF_8.toString())
+//    }
 
     val textRecognizer =
         remember { TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS) }
@@ -46,7 +52,11 @@ fun TextScannerScreen(
         is TextScannerScreenState.Scanning -> MLKitTextRecognition(
             onTakePhoto = viewModel::onPhotoTaken,
             textRecognizer = textRecognizer,
-            onTextRecognized = viewModel::onIdFound
+            onTextRecognized = viewModel::onIdFound,
+            regex = regex?.let {
+                URLDecoder.decode(regex, java.nio.charset.StandardCharsets.UTF_8.toString())
+                    .toRegex()
+            }
         )
         is TextScannerScreenState.Cropping -> {
             imageCropLauncher.launch(

@@ -100,7 +100,8 @@ fun ListScreen(
                                 //.background(C.Golden)
                             )
                             .clickable {
-                                navigator.navigate(TextScannerScreenDestination)
+                                var xd = state.regex
+                                navigator.navigate(TextScannerScreenDestination(regex = state.regex))
                             }
                             .weight(0.15f)
                     )
