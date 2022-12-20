@@ -36,11 +36,10 @@ fun MLKitTextRecognition(
     onTakePhoto: (Uri) -> Unit,
     textRecognizer: TextRecognizer,
     onTextRecognized: (String) -> Unit,
-    regex: Regex?
+    regex: String?
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val extractedText = remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -93,7 +92,7 @@ fun TextRecognitionView(
     onTakePhoto: (Uri) -> Unit,
     imageCapture: ImageCapture,
     textRecognizer: TextRecognizer,
-    regex: Regex?
+    regex: String?
 ) {
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     var preview by remember { mutableStateOf<Preview?>(null) }
@@ -185,7 +184,7 @@ private fun makeFile(
         Executors.newSingleThreadExecutor(),
         object : ImageCapture.OnImageSavedCallback {
             override fun onError(exception: ImageCaptureException) {
-                Toast.makeText(context, exception.message, Toast.LENGTH_SHORT)
+                Toast.makeText(context, exception.message, Toast.LENGTH_SHORT).show()
             }
 
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {

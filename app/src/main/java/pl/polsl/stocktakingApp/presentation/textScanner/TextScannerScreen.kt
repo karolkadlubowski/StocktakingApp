@@ -27,10 +27,6 @@ fun TextScannerScreen(
 ) {
     val state by viewModel.observeState()
 
-//    val regex = remember{
-//        URLDecoder.decode(regex,java.nio.charset.StandardCharsets.UTF_8.toString())
-//    }
-
     val textRecognizer =
         remember { TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS) }
 
@@ -55,7 +51,6 @@ fun TextScannerScreen(
             onTextRecognized = viewModel::onIdFound,
             regex = regex?.let {
                 URLDecoder.decode(regex, java.nio.charset.StandardCharsets.UTF_8.toString())
-                    .toRegex()
             }
         )
         is TextScannerScreenState.Cropping -> {
@@ -72,27 +67,6 @@ fun TextScannerScreen(
                     (state as TextScannerScreenState.Found).foundId
                 )
             )
-//            Column {
-//                AsyncImage(
-//                    modifier = Modifier.weight(1f),
-//                    model = ImageRequest.Builder(LocalContext.current)
-//                        .data((state as TextScannerScreenState.Found).finalPhotoUri).apply {
-//                            if (LocalInspectionMode.current) {
-//                                placeholder(R.drawable.placeholder)
-//                            }
-//                        }.build(),
-//                    contentDescription = "Preview of image taken",
-//                    contentScale = ContentScale.Crop,
-//                )
-
-//                Text(
-//                    text = (state as TextScannerScreenState.Found).foundId,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .background(Color.White)
-//                        .padding(16.dp)
-//                )
-            //           }
         }
     }
 }

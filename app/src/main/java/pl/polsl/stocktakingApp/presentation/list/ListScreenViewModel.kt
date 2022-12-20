@@ -19,7 +19,7 @@ class ListScreenViewModel @Inject constructor(
     private val printLabel: PrintLabel,
     private val getLabelCodeType: GetLabelCodeType,
     private val getSelectedPrinter: GetSelectedPrinter,
-    _observeRegex: ObserveRegex,
+    _observeRegex: ObserveExampleNumber,
     _observeObjectList: ObserveObjectList,
     _coroutineDispatcher: CoroutineDispatcher
 ) : BaseViewModel<ListScreenState>(_coroutineDispatcher) {
