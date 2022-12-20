@@ -21,4 +21,20 @@ class RegexService {
 
         return regexStringBuilder.toString().toRegex()
     }
+
+    fun switchSigns(scannedString: String, regexString: String, regex: Regex): String? {
+        val dReplacedForZero = scannedString.replace('D', '0')
+        val oReplacedForZero = dReplacedForZero.replace('O', '0')
+        var foundPattern = regex.find(oReplacedForZero)
+
+        if (foundPattern != null) {
+            return foundPattern.value
+        }
+
+        val tReplacedForFour = scannedString.replace('T', '4')
+
+        foundPattern = regex.find(tReplacedForFour)
+
+        return foundPattern?.value
+    }
 }
