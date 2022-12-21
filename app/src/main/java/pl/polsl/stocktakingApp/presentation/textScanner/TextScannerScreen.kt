@@ -38,8 +38,7 @@ fun TextScannerScreen(
                 InputImage.fromFilePath(context, result.uriContent!!),
             )
         } else {
-            // TODO
-            val exception = result.error
+            viewModel.continueScanning()
         }
     }
 
@@ -51,7 +50,8 @@ fun TextScannerScreen(
             onTextRecognized = viewModel::onIdFound,
             regex = regex?.let {
                 URLDecoder.decode(regex, java.nio.charset.StandardCharsets.UTF_8.toString())
-            }
+            },
+            onBackPressed = { navigator.popBackStack() }
         )
         is TextScannerScreenState.Cropping -> {
             imageCropLauncher.launch(
@@ -67,6 +67,8 @@ fun TextScannerScreen(
                     (state as TextScannerScreenState.Found).foundId
                 )
             )
+
+            viewModel.continueScanning()
         }
     }
 }

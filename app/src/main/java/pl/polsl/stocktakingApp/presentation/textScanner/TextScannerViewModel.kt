@@ -76,13 +76,8 @@ class TextScannerScreenViewModel @Inject constructor(
         }
     }
 
-    private fun continueScanning() {
+    fun continueScanning() {
         _state.value = TextScannerScreenState.Scanning
-    }
-
-    fun rejectPhotoAndContinuePointing(photoUri: Uri) {
-        photoUri.toFile().delete()
-        continueScanning()
     }
 }
 
