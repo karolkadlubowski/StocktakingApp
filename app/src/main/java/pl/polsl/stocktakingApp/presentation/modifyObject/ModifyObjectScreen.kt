@@ -11,7 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,6 +28,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.data.models.StocktakingObject
+import pl.polsl.stocktakingApp.presentation.common.observeState
 import pl.polsl.stocktakingApp.presentation.common.ui.InputField
 import pl.polsl.stocktakingApp.presentation.destinations.ListScreenDestination
 import pl.polsl.stocktakingApp.ui.theme.D
@@ -43,24 +43,14 @@ fun ModifyObjectScreen(
     code: String? = null,
     stocktakingObject: StocktakingObject? = null
 ) {
-    val name = remember { mutableStateOf(TextFieldValue("")) }
-    val barcode = remember { mutableStateOf(TextFieldValue("")) }
-    val description =
-        remember { mutableStateOf(TextFieldValue("")) }
-    val amount =
-        remember { mutableStateOf(TextFieldValue("1")) }
+    val state by viewModel.observeState()
 
     LaunchedEffect(key1 = "init", block = {
-        viewModel.init(stocktakingObject)
-        if (stocktakingObject != null) {
-            name.value = TextFieldValue(stocktakingObject.name)
-            barcode.value = TextFieldValue(stocktakingObject.barcode)
-            description.value = TextFieldValue(stocktakingObject.description)
-            amount.value = TextFieldValue(stocktakingObject.amount.toString())
-        } else if (code != null) {
-            barcode.value = TextFieldValue(code)
-            viewModel.setBarcode(code)
+        if (code != null) {
+            viewModel.init(StocktakingObject(barcode = code))
         }
+
+        viewModel.init(stocktakingObject)
     })
 
     val screenMode: ObjectModificationMode = remember {
@@ -89,60 +79,46 @@ fun ModifyObjectScreen(
                     .padding(vertical = 10.dp)
                     .weight(1f)
             )
-
-            Icon(
-                painter = painterResource(id = R.drawable.ic_delete),
-                contentDescription = stringResource(R.string.iconDescription),
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .padding(start = D.Icon.padding)
-                    .then(
-                        Modifier
-                            .aspectRatio(1f)
-                            .clip(CircleShape)
-                        //.background(C.Golden)
-                    )
-                    .clickable {
-                        viewModel.deleteObject()
-                        navigator.popBackStack()
-                    }
-                    .weight(0.15f)
-            )
+            if (state is ModifyObjectScreenState.EditObjectState) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_delete),
+                    contentDescription = stringResource(R.string.iconDescription),
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .padding(start = D.Icon.padding)
+                        .then(
+                            Modifier
+                                .aspectRatio(1f)
+                                .clip(CircleShape)
+                        )
+                        .clickable {
+                            viewModel.deleteObject()
+                            navigator.popBackStack()
+                        }
+                        .weight(0.15f)
+                )
+            }
         }
 
         InputField(
-            value = name.value,
-            onValueChange = {
-                name.value = it
-                viewModel.setName(it.text)
-            },
+            value = state.name,
+            onValueChange = viewModel::setName,
             description = "Nazwa"
         )
         InputField(
-            value = barcode.value,
-            onValueChange = {
-                barcode.value = it
-                viewModel.setBarcode(it.text)
-
-            },
+            value = state.barcode,
+            onValueChange = viewModel::setBarcode,
             description = "Kod"
         )
         InputField(
-            value = description.value,
-            onValueChange = {
-                description.value = it
-                viewModel.setDescription(it.text)
-
-            },
+            value = state.description,
+            onValueChange = viewModel::setDescription,
             description = "Opis",
             singleLine = false
         )
         InputField(
-            value = amount.value,
-            onValueChange = {
-                amount.value = it
-                viewModel.setAmount(it.text.toInt())
-            },
+            value = state.amount.toString(),
+            onValueChange = { viewModel.setAmount(it.toInt()) },
             description = "Ilość",
             keyboardOptions = KeyboardOptions().copy(keyboardType = KeyboardType.Number)
         )

@@ -9,14 +9,11 @@ import androidx.camera.view.PreviewView
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
@@ -34,32 +31,51 @@ import java.util.concurrent.Executors
 @Composable
 fun MLKitTextRecognition(
     onTakePhoto: (Uri) -> Unit,
-    textRecognizer: TextRecognizer
+    textRecognizer: TextRecognizer,
+    onTextRecognized: (String) -> Unit,
+    regex: String?,
+    onBackPressed: () -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val extractedText = remember { mutableStateOf("") }
+
+    val imageCapture = remember {
+        ImageCapture.Builder()
+            .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+            .build()
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        val imageCapture = remember {
-            ImageCapture.Builder()
-                .setTargetAspectRatio(AspectRatio.RATIO_4_3)
-                .build()
-        }
+
         TextRecognitionView(
             context = context,
             lifecycleOwner = lifecycleOwner,
-            extractedText = extractedText,
-            onTakePhoto = onTakePhoto,
+            onTextRecognized = onTextRecognized,
             imageCapture = imageCapture,
-            textRecognizer = textRecognizer
+            textRecognizer = textRecognizer,
+            regex = regex
         )
 
-//        Button(onClick = { makeFile(context, imageCapture, onTakePhoto) }) {
-//            Text(text = "make photo")
+//        Row(
+//            verticalAlignment = Alignment.CenterVertically,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(15.dp)
+//                .align(Alignment.TopStart)
+//        ) {
+//            IconButton(
+//                onClick = onBackPressed
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Filled.ArrowBack,
+//                    contentDescription = "Go back",
+//                    tint = Color.White
+//                )
+//            }
 //        }
+
 
         IconButton(
             modifier = Modifier
@@ -86,10 +102,10 @@ fun MLKitTextRecognition(
 fun TextRecognitionView(
     context: Context,
     lifecycleOwner: LifecycleOwner,
-    extractedText: MutableState<String>,
-    onTakePhoto: (Uri) -> Unit,
+    onTextRecognized: (String) -> Unit,
     imageCapture: ImageCapture,
-    textRecognizer: TextRecognizer
+    textRecognizer: TextRecognizer,
+    regex: String?
 ) {
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     var preview by remember { mutableStateOf<Preview?>(null) }
@@ -97,7 +113,6 @@ fun TextRecognitionView(
     val cameraProvider = cameraProviderFuture.get()
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
 
-    Box {
         AndroidView(
             modifier = Modifier
                 .fillMaxWidth()
@@ -111,7 +126,11 @@ fun TextRecognitionView(
                         .apply {
                             setAnalyzer(
                                 cameraExecutor,
-                                ObjectDetectorImageAnalyzer(textRecognizer, extractedText)
+                                ObjectDetectorImageAnalyzer(
+                                    textRecognizer,
+                                    onTextRecognized,
+                                    regex
+                                )
                             )
                         }
                     val cameraSelector = CameraSelector.Builder()
@@ -132,27 +151,6 @@ fun TextRecognitionView(
                 previewView
             }
         )
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(15.dp)
-                .align(Alignment.TopStart)
-        ) {
-            IconButton(
-                onClick = {
-                    makeFile(context, imageCapture, onTakePhoto)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "back",
-                    tint = Color.White
-                )
-            }
-        }
-    }
 }
 
 private fun makeFile(
@@ -177,7 +175,7 @@ private fun makeFile(
         Executors.newSingleThreadExecutor(),
         object : ImageCapture.OnImageSavedCallback {
             override fun onError(exception: ImageCaptureException) {
-                Toast.makeText(context, exception.message, Toast.LENGTH_SHORT)
+                Toast.makeText(context, exception.message, Toast.LENGTH_SHORT).show()
             }
 
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {

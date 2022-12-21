@@ -16,14 +16,15 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import pl.polsl.printer.BluetoothService
 import pl.polsl.printer.LabelLineDividerService
-import pl.polsl.printer.OutputBluetoothService
 import pl.polsl.stocktakingApp.data.Database
 import pl.polsl.stocktakingApp.data.dao.StocktakingDao
 import pl.polsl.stocktakingApp.data.repository.StocktakingRepository
 import pl.polsl.stocktakingApp.data.settings.SETTINGS_NAME
 import pl.polsl.stocktakingApp.data.settings.Settings
 import pl.polsl.stocktakingApp.data.settings.SettingsImpl
+import pl.polsl.stocktakingApp.domain.services.RegexService
 import pl.polsl.stocktakingApp.domain.usecase.*
 import javax.inject.Singleton
 
@@ -64,18 +65,18 @@ object MainModule {
 
     @Provides
     @Singleton
-    fun providesOutputBluetoothService(@ApplicationContext context: Context): OutputBluetoothService =
-        OutputBluetoothService(context)
+    fun providesBluetoothService(@ApplicationContext context: Context): BluetoothService =
+        BluetoothService(context)
 
     @Provides
     @Singleton
-    fun providesGetBondedDevicesUseCase(outputBluetoothService: OutputBluetoothService): GetBondedDevices =
-        GetBondedDevicesImpl(outputBluetoothService)
+    fun providesGetBondedDevicesUseCase(bluetoothService: BluetoothService): GetBondedDevices =
+        GetBondedDevicesImpl(bluetoothService)
 
     @Provides
     @Singleton
-    fun providesBluetoothConnectionUseCase(outputBluetoothService: OutputBluetoothService): ProvideBluetoothConnection =
-        ProvideBluetoothConnectionImpl(outputBluetoothService)
+    fun providesBluetoothConnectionUseCase(bluetoothService: BluetoothService): ProvideBluetoothConnection =
+        ProvideBluetoothConnectionImpl(bluetoothService)
 
     @Singleton
     @Provides
@@ -133,12 +134,26 @@ object MainModule {
     @Provides
     @Singleton
     fun providesPrintLabel(
-        outputBluetoothService: OutputBluetoothService,
+        bluetoothService: BluetoothService,
         labelLineDividerService: LabelLineDividerService
-    ): PrintLabel = PrintLabelImpl(outputBluetoothService, labelLineDividerService)
+    ): PrintLabel = PrintLabelImpl(bluetoothService, labelLineDividerService)
 
     @Provides
     @Singleton
     fun providesDeleteObject(stocktakingRepository: StocktakingRepository): DeleteObject =
         DeleteObjectImpl(stocktakingRepository)
+
+    @Provides
+    @Singleton
+    fun providesSetExampleNumber(settings: Settings): SetExampleNumber =
+        SetExampleNumberImpl(settings)
+
+    @Provides
+    @Singleton
+    fun providesObserveExampleNumber(settings: Settings): ObserveExampleNumber =
+        ObserveExampleNumberImpl(settings)
+
+    @Provides
+    @Singleton
+    fun providesRegexService(): RegexService = RegexService()
 }

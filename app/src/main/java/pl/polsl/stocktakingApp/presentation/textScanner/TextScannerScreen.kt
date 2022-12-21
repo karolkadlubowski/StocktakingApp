@@ -16,12 +16,14 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pl.polsl.stocktakingApp.presentation.common.observeState
 import pl.polsl.stocktakingApp.presentation.destinations.ModifyObjectScreenDestination
+import java.net.URLDecoder
 
 @Destination
 @Composable
 fun TextScannerScreen(
     navigator: DestinationsNavigator,
-    viewModel: TextScannerScreenViewModel = hiltViewModel()
+    viewModel: TextScannerScreenViewModel = hiltViewModel(),
+    regex: String?
 ) {
     val state by viewModel.observeState()
 
@@ -36,8 +38,7 @@ fun TextScannerScreen(
                 InputImage.fromFilePath(context, result.uriContent!!),
             )
         } else {
-            // TODO
-            val exception = result.error
+            viewModel.continueScanning()
         }
     }
 
@@ -45,7 +46,12 @@ fun TextScannerScreen(
     when (state) {
         is TextScannerScreenState.Scanning -> MLKitTextRecognition(
             onTakePhoto = viewModel::onPhotoTaken,
-            textRecognizer = textRecognizer
+            textRecognizer = textRecognizer,
+            onTextRecognized = viewModel::onIdFound,
+            regex = regex?.let {
+                URLDecoder.decode(regex, java.nio.charset.StandardCharsets.UTF_8.toString())
+            },
+            onBackPressed = { navigator.popBackStack() }
         )
         is TextScannerScreenState.Cropping -> {
             imageCropLauncher.launch(
@@ -61,27 +67,8 @@ fun TextScannerScreen(
                     (state as TextScannerScreenState.Found).foundId
                 )
             )
-//            Column {
-//                AsyncImage(
-//                    modifier = Modifier.weight(1f),
-//                    model = ImageRequest.Builder(LocalContext.current)
-//                        .data((state as TextScannerScreenState.Found).finalPhotoUri).apply {
-//                            if (LocalInspectionMode.current) {
-//                                placeholder(R.drawable.placeholder)
-//                            }
-//                        }.build(),
-//                    contentDescription = "Preview of image taken",
-//                    contentScale = ContentScale.Crop,
-//                )
 
-//                Text(
-//                    text = (state as TextScannerScreenState.Found).foundId,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .background(Color.White)
-//                        .padding(16.dp)
-//                )
-            //           }
+            viewModel.continueScanning()
         }
     }
 }

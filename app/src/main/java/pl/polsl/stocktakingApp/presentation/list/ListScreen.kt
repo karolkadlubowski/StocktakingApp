@@ -60,11 +60,7 @@ fun ListScreen(
     }
 
     SnackbarScreenWrapper(snackbarHostState = snackbarHostState) {
-        Scaffold(
-            //        bottomBar = {
-            //        ButtonBottomBar(buttonText = "Rozpocznij skanowanie", onClickButton = {})
-            //    }
-        ) {
+        Scaffold {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -97,10 +93,9 @@ fun ListScreen(
                                 Modifier
                                     .aspectRatio(1f)
                                     .clip(CircleShape)
-                                //.background(C.Golden)
                             )
                             .clickable {
-                                navigator.navigate(TextScannerScreenDestination)
+                                navigator.navigate(TextScannerScreenDestination(regex = state.regex))
                             }
                             .weight(0.15f)
                     )
@@ -115,7 +110,6 @@ fun ListScreen(
                                 Modifier
                                     .aspectRatio(1f)
                                     .clip(CircleShape)
-                                //.background(C.Golden)
                             )
                             .clickable {
                                 navigator.navigate(ModifyObjectScreenDestination())

@@ -21,10 +21,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import pl.polsl.stocktakingApp.ui.theme.C
@@ -35,8 +33,8 @@ import pl.polsl.stocktakingApp.ui.theme.inputFieldHeader
 @Composable
 fun InputField(
     modifier: Modifier = Modifier,
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    value: String,
+    onValueChange: (String) -> Unit,
     singleLine: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
@@ -65,7 +63,7 @@ fun InputField(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }) {
                     focusRequester.requestFocus()
-                    onValueChange(value.copy(selection = TextRange(value.text.length)))
+                    onValueChange(value)
                 }
         ) {
             BasicTextField(

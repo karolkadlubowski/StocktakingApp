@@ -21,69 +21,112 @@ class ModifyObjectScreenViewModel @Inject constructor(
     override val initialState: ModifyObjectScreenState = ModifyObjectScreenState.InitialState
 
     private val _isAddScreen: MutableStateFlow<Boolean> = MutableStateFlow(true)
-    private val _stocktakingObject: MutableStateFlow<StocktakingObject> =
-        MutableStateFlow(StocktakingObject())
+    private val _id: MutableStateFlow<Int?> =
+        MutableStateFlow(null)
+    private val _name: MutableStateFlow<String> =
+        MutableStateFlow("")
+    private val _barcode: MutableStateFlow<String> =
+        MutableStateFlow("")
+    private val _description: MutableStateFlow<String> =
+        MutableStateFlow("")
+    private val _amount: MutableStateFlow<Int> =
+        MutableStateFlow(1)
 
-    override val _state: Flow<ModifyObjectScreenState> =
-        _isAddScreen.combine(_stocktakingObject) { isAddScreen, _stocktakingObject ->
-            if (isAddScreen)
-                ModifyObjectScreenState.AddObjectState(_stocktakingObject)
-            else
-                ModifyObjectScreenState.EditObjectState(_stocktakingObject)
-        }
 
+    override val _state: Flow<ModifyObjectScreenState> = combine(
+        flow = _name,
+        flow2 = _barcode,
+        flow3 = _description,
+        flow4 = _amount,
+        flow5 = _isAddScreen
+    ) { name, barcode, description, amount, isAddScreen ->
+        if (isAddScreen)
+            ModifyObjectScreenState.AddObjectState(name, barcode, description, amount)
+        else
+            ModifyObjectScreenState.EditObjectState(name, barcode, description, amount)
+    }
 
     fun init(stocktakingObject: StocktakingObject?) {
         if (stocktakingObject == null) {
             _isAddScreen.update { true }
         } else {
             _isAddScreen.update { false }
-            _stocktakingObject.update { stocktakingObject }
+            _id.update { stocktakingObject.id }
+            _name.update { stocktakingObject.name }
+            _amount.update { stocktakingObject.amount }
+            _description.update { stocktakingObject.description }
+            _barcode.update { stocktakingObject.barcode }
         }
     }
 
     fun upsertObject() =
         launch {
             _upsertObject(
-                _stocktakingObject.value
+                StocktakingObject(
+                    _id.value,
+                    _name.value,
+                    _description.value,
+                    _amount.value,
+                    _barcode.value
+                )
             )
         }
 
     fun deleteObject() = launch {
         _deleteObject(
-            DeleteObject.Params(_stocktakingObject.value)
+            DeleteObject.Params(
+                StocktakingObject(
+                    _id.value,
+                    _name.value,
+                    _description.value,
+                    _amount.value,
+                    _barcode.value
+                )
+            )
         )
     }
 
     fun setName(name: String) {
-        _stocktakingObject.value.name = name
+        _name.update { name }
     }
 
     fun setBarcode(barcode: String) {
-        _stocktakingObject.value.barcode = barcode
+        _barcode.update { barcode }
     }
 
     fun setDescription(description: String) {
-        _stocktakingObject.value.description = description
+        _description.update { description }
     }
 
     fun setAmount(amount: Int) {
-        _stocktakingObject.value.amount = amount
+        _amount.update { amount }
     }
 }
 
 sealed class ModifyObjectScreenState {
-    abstract val stocktakingObject: StocktakingObject
+    abstract val name: String
+    abstract val barcode: String
+    abstract val description: String
+    abstract val amount: Int
 
     object InitialState : ModifyObjectScreenState() {
-        override val stocktakingObject = StocktakingObject()
+        override val name: String = ""
+        override val barcode: String = ""
+        override val description: String = ""
+        override val amount: Int = 1
     }
 
     data class AddObjectState(
-        override val stocktakingObject: StocktakingObject = StocktakingObject()
+        override val name: String,
+        override val barcode: String,
+        override val description: String,
+        override val amount: Int
     ) : ModifyObjectScreenState()
 
     data class EditObjectState(
-        override val stocktakingObject: StocktakingObject
+        override val name: String,
+        override val barcode: String,
+        override val description: String,
+        override val amount: Int
     ) : ModifyObjectScreenState()
 }
