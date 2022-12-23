@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.text.TextRecognizer
 import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.ui.theme.C
@@ -34,7 +35,8 @@ fun MLKitTextRecognition(
     textRecognizer: TextRecognizer,
     onTextRecognized: (String) -> Unit,
     regex: String?,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    barcodeScanner: BarcodeScanner
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -55,27 +57,9 @@ fun MLKitTextRecognition(
             onTextRecognized = onTextRecognized,
             imageCapture = imageCapture,
             textRecognizer = textRecognizer,
-            regex = regex
+            regex = regex,
+            barcodeScanner = barcodeScanner
         )
-
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(15.dp)
-//                .align(Alignment.TopStart)
-//        ) {
-//            IconButton(
-//                onClick = onBackPressed
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Filled.ArrowBack,
-//                    contentDescription = "Go back",
-//                    tint = Color.White
-//                )
-//            }
-//        }
-
 
         IconButton(
             modifier = Modifier
@@ -105,7 +89,8 @@ fun TextRecognitionView(
     onTextRecognized: (String) -> Unit,
     imageCapture: ImageCapture,
     textRecognizer: TextRecognizer,
-    regex: String?
+    regex: String?,
+    barcodeScanner: BarcodeScanner
 ) {
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     var preview by remember { mutableStateOf<Preview?>(null) }
@@ -126,10 +111,11 @@ fun TextRecognitionView(
                         .apply {
                             setAnalyzer(
                                 cameraExecutor,
-                                ObjectDetectorImageAnalyzer(
+                                ImageAnalyzer(
                                     textRecognizer,
                                     onTextRecognized,
-                                    regex
+                                    regex,
+                                    barcodeScanner = barcodeScanner
                                 )
                             )
                         }

@@ -9,6 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -29,6 +30,8 @@ fun TextScannerScreen(
 
     val textRecognizer =
         remember { TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS) }
+
+    val barcodeScanner = remember { BarcodeScanning.getClient() }
 
     val context = LocalContext.current
 
@@ -51,7 +54,8 @@ fun TextScannerScreen(
             regex = regex?.let {
                 URLDecoder.decode(regex, java.nio.charset.StandardCharsets.UTF_8.toString())
             },
-            onBackPressed = { navigator.popBackStack() }
+            onBackPressed = { navigator.popBackStack() },
+            barcodeScanner = barcodeScanner
         )
         is TextScannerScreenState.Cropping -> {
             imageCropLauncher.launch(
