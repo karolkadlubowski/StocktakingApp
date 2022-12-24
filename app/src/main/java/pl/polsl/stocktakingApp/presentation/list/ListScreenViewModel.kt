@@ -23,11 +23,11 @@ class ListScreenViewModel @Inject constructor(
 ) : BaseViewModel<ListScreenState>(_coroutineDispatcher) {
     override val initialState: ListScreenState = ListScreenState.InitialState
 
-    private var _list: DataFlow<List<StocktakingObject>> = _observeObjectList(Unit)
-
     private var _regex = _observeRegex(Unit)
 
     private val _searchField: MutableStateFlow<String> = MutableStateFlow("")
+
+    private var _list: DataFlow<List<StocktakingObject>> = _observeObjectList(_searchField)
 
     override val _state: Flow<ListScreenState> = combine(
         _list.map { it.data },

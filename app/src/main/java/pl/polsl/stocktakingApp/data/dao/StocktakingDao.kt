@@ -15,6 +15,6 @@ interface StocktakingDao {
     @Delete
     suspend fun delete(stocktakingObject: StocktakingObject)
 
-    @Query("SELECT * FROM stocktakingObject")
-    fun observeAll(): Flow<List<StocktakingObject>>
+    @Query("SELECT * FROM stocktakingObject WHERE name LIKE '%' || :query || '%' OR barcode LIKE '%' || :query || '%'")
+    fun observeAll(query: String): Flow<List<StocktakingObject>>
 }
