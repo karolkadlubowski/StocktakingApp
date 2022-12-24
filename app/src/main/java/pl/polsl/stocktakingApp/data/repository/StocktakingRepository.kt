@@ -1,6 +1,7 @@
 package pl.polsl.stocktakingApp.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import pl.polsl.stocktakingApp.common.DataFlow
 import pl.polsl.stocktakingApp.common.LoadingStatus
 import pl.polsl.stocktakingApp.common.withLoading
@@ -15,7 +16,9 @@ class StocktakingRepository(
     fun observeObjectList(
         queryFlow: Flow<String>
     ): DataFlow<List<StocktakingObject>> {
-        return _stocktakingDao.observeAll().withLoading(loadingObjects)
+        return queryFlow.flatMapLatest {
+            _stocktakingDao.observeAll(it).withLoading(loadingObjects)
+        }
     }
 
     suspend fun upsertObject(stocktakingObject: StocktakingObject) {
