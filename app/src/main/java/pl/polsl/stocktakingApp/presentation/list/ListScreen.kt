@@ -28,6 +28,7 @@ import pl.polsl.stocktakingApp.presentation.common.Event
 import pl.polsl.stocktakingApp.presentation.common.observeEvents
 import pl.polsl.stocktakingApp.presentation.common.observeState
 import pl.polsl.stocktakingApp.presentation.common.ui.ObjectItem
+import pl.polsl.stocktakingApp.presentation.common.ui.SearchField
 import pl.polsl.stocktakingApp.presentation.common.ui.SnackbarScreenWrapper
 import pl.polsl.stocktakingApp.presentation.destinations.ConfigScreenDestination
 import pl.polsl.stocktakingApp.presentation.destinations.ModifyObjectScreenDestination
@@ -139,6 +140,12 @@ fun ListScreen(
                     )
 
                 }
+
+                SearchField(
+                    searchQuery = state.searchField,
+                    onSearchQueryChanged = viewModel::changeSearchQuery
+                )
+
                 LazyColumn(
                     Modifier
                         .fillMaxSize()

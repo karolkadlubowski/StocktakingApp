@@ -2,9 +2,7 @@ package pl.polsl.stocktakingApp.presentation.list
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import pl.polsl.printer.Result
 import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.common.DataFlow
@@ -29,6 +27,20 @@ class ListScreenViewModel @Inject constructor(
 
     private var _regex = _observeRegex(Unit)
 
+    private val _searchField: MutableStateFlow<String> = MutableStateFlow("")
+
+    override val _state: Flow<ListScreenState> = combine(
+        _list.map { it.data },
+        _regex,
+        _searchField
+    ) { list, regex, searchField ->
+        ListScreenState.ReadyState(list, regex, searchField)
+    }
+
+    fun changeSearchQuery(string: String) {
+        _searchField.update { string }
+    }
+
     fun printLabel(stocktakingObject: StocktakingObject) = launch {
         val selectedPrinter = getSelectedPrinter(Unit)
 
@@ -46,24 +58,21 @@ class ListScreenViewModel @Inject constructor(
         } else {
             _events.emit(Event.NoSelectedPrinter)
         }
-
-    }
-
-    override val _state: Flow<ListScreenState> = combine(
-        _list.map { it.data },
-        _regex
-    ) { list, regex ->
-        ListScreenState.ReadyState(list, regex)
     }
 }
 
 sealed class ListScreenState {
     abstract val regex: String?
+    abstract val searchField: String
 
     object InitialState : ListScreenState() {
         override val regex: String? = null
+        override val searchField: String = ""
     }
 
-    data class ReadyState(val list: List<StocktakingObject>, override val regex: String?) :
-        ListScreenState()
+    data class ReadyState(
+        val list: List<StocktakingObject>,
+        override val regex: String?,
+        override val searchField: String
+    ) : ListScreenState()
 }
