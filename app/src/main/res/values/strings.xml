@@ -11,4 +11,6 @@
     <string name="bluetoothEnablingError">Wystąpił błąd podczas uruchamiania bluetooth</string>
     <string name="printLabelError">Wystąpił błąd podczas drukowania etykiety</string>
     <string name="EmptyFieldsEvent">Pola zostały niepoprawnie wypełnione. Spróbuj ponownie.</string>
+    <string name="ObjectAlreadyExistsEvent">Podany numer inwentarzowy jest już przypisany do innego obiektu. Sprawdź poprawność kodu.</string>
+    <string name="ObjectNotExistsEvent">Nie znaleziono obiektu w bazie danych.</string>
 </resources>

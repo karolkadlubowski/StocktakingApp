@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.data.models.StocktakingObject
+import pl.polsl.stocktakingApp.domain.usecase.CheckIfObjectExists
 import pl.polsl.stocktakingApp.domain.usecase.DeleteObject
 import pl.polsl.stocktakingApp.domain.usecase.UpsertObject
 import pl.polsl.stocktakingApp.presentation.common.BaseViewModel
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class ModifyObjectScreenViewModel @Inject constructor(
     private val _upsertObject: UpsertObject,
     private val _deleteObject: DeleteObject,
+    private val _checkIfObjectExists: CheckIfObjectExists,
     _coroutineDispatcher: CoroutineDispatcher
 ) : BaseViewModel<ModifyObjectScreenState>(_coroutineDispatcher) {
     override val initialState: ModifyObjectScreenState = ModifyObjectScreenState.InitialState
@@ -31,9 +33,8 @@ class ModifyObjectScreenViewModel @Inject constructor(
         MutableStateFlow("")
     private val _description: MutableStateFlow<String> =
         MutableStateFlow("")
-    private val _amount: MutableStateFlow<Int> =
-        MutableStateFlow(1)
-
+    private val _amount: MutableStateFlow<String> =
+        MutableStateFlow("1")
 
     override val _state: Flow<ModifyObjectScreenState> = combine(
         flow = _name,
@@ -55,7 +56,7 @@ class ModifyObjectScreenViewModel @Inject constructor(
             _isAddScreen.update { false }
             _id.update { stocktakingObject.id }
             _name.update { stocktakingObject.name }
-            _amount.update { stocktakingObject.amount }
+            _amount.update { stocktakingObject.amount.toString() }
             _description.update { stocktakingObject.description }
             _barcode.update { stocktakingObject.barcode }
         }
@@ -63,13 +64,17 @@ class ModifyObjectScreenViewModel @Inject constructor(
 
     fun upsertObject() =
         launch {
-            if (_name.value.isNotBlank() && _barcode.value.isNotBlank()) {
+            if (_checkIfObjectExists(_barcode.value) && state.value is ModifyObjectScreenState.AddObjectState) {
+                _events.emit(ObjectAlreadyExists)
+                return@launch
+            }
+            if (_name.value.isNotBlank() && _barcode.value.isNotBlank() && _amount.value.toIntOrNull() != null) {
                 _upsertObject(
                     StocktakingObject(
                         _id.value,
                         _name.value,
                         _description.value,
-                        _amount.value,
+                        _amount.value.toInt(),
                         _barcode.value
                     )
                 )
@@ -86,7 +91,7 @@ class ModifyObjectScreenViewModel @Inject constructor(
                     _id.value,
                     _name.value,
                     _description.value,
-                    _amount.value,
+                    _amount.value.toInt(),
                     _barcode.value
                 )
             )
@@ -105,38 +110,39 @@ class ModifyObjectScreenViewModel @Inject constructor(
         _description.update { description }
     }
 
-    fun setAmount(amount: Int) {
+    fun setAmount(amount: String) {
         _amount.update { amount }
     }
 
     object EmptyFields : Event.Message(R.string.EmptyFieldsEvent)
     object ObjectUpsertSuccess : Event()
+    object ObjectAlreadyExists : Event.Message(R.string.ObjectAlreadyExistsEvent)
 }
 
 sealed class ModifyObjectScreenState {
     abstract val name: String
     abstract val barcode: String
     abstract val description: String
-    abstract val amount: Int
+    abstract val amount: String
 
     object InitialState : ModifyObjectScreenState() {
         override val name: String = ""
         override val barcode: String = ""
         override val description: String = ""
-        override val amount: Int = 1
+        override val amount: String = "1"
     }
 
     data class AddObjectState(
         override val name: String,
         override val barcode: String,
         override val description: String,
-        override val amount: Int
+        override val amount: String
     ) : ModifyObjectScreenState()
 
     data class EditObjectState(
         override val name: String,
         override val barcode: String,
         override val description: String,
-        override val amount: Int
+        override val amount: String
     ) : ModifyObjectScreenState()
 }

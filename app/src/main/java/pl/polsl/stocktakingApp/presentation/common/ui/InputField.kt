@@ -39,11 +39,9 @@ fun InputField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
     border: BorderStroke? = null,
-    hint: @Composable (() -> Unit)? = null,
-    leadingIcon: @Composable (() -> Unit)? = null,
     maxLines: Int = 1,
-    error: String? = null,
-    description: String
+    description: String,
+    isEnabled: Boolean = true
 ) {
 
     val focusRequester = FocusRequester()
@@ -89,6 +87,7 @@ fun InputField(
                 visualTransformation = if (keyboardOptions.keyboardType == KeyboardType.Password) PasswordVisualTransformation() else VisualTransformation.None,
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
+                enabled = isEnabled
             )
         }
 //        AnimatedVisibility(

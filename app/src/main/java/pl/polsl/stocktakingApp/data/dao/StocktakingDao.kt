@@ -17,4 +17,7 @@ interface StocktakingDao {
 
     @Query("SELECT * FROM stocktakingObject WHERE name LIKE '%' || :query || '%' OR barcode LIKE '%' || :query || '%'")
     fun observeAll(query: String): Flow<List<StocktakingObject>>
+
+    @Query("SELECT COUNT(*) FROM stocktakingObject WHERE barcode LIKE :barcode")
+    suspend fun getObjectAmountWithBarcode(barcode: String): Int
 }

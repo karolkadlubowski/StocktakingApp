@@ -128,7 +128,8 @@ fun ModifyObjectScreen(
             InputField(
                 value = state.barcode,
                 onValueChange = viewModel::setBarcode,
-                description = "Kod"
+                description = "Kod",
+                isEnabled = state is ModifyObjectScreenState.AddObjectState
             )
             InputField(
                 value = state.description,
@@ -137,8 +138,8 @@ fun ModifyObjectScreen(
                 singleLine = false
             )
             InputField(
-                value = state.amount.toString(),
-                onValueChange = { viewModel.setAmount(if (it.isEmpty()) 0 else it.toInt()) },
+                value = state.amount,
+                onValueChange = { viewModel.setAmount(it.filterNot { it.isWhitespace() || !it.isDigit() }) },
                 description = "Ilość",
                 keyboardOptions = KeyboardOptions().copy(keyboardType = KeyboardType.Number)
             )
