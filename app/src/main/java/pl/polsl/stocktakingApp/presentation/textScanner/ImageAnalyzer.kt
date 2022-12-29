@@ -12,10 +12,12 @@ import pl.polsl.stocktakingApp.domain.services.RegexService
 class ImageAnalyzer(
     private val textRecognizer: TextRecognizer,
     private val onRegexFound: (String) -> Unit,
-    private val regexString: String?,// = "[a-zA-Z][a-zA-Z][a-zA-Z]-\\d\\d\\d\\d\\d\\d\\d".toRegex()
+    private val regexString: String?,
     private val regexService: RegexService = RegexService(),
     private val barcodeScanner: BarcodeScanner
 ) : ImageAnalysis.Analyzer {
+    private val regex = regexString?.let { regexService.rewriteStringToRegex(it) }
+
     @SuppressLint("UnsafeOptInUsageError")
     override fun analyze(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
@@ -34,19 +36,16 @@ class ImageAnalyzer(
                 }
 
             if (!regexString.isNullOrEmpty()) {
-
-                val regex = regexService.rewriteStringToRegex(regexString)
-
                 textRecognizer.process(image)
-                    .addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            val foundString = it.result.text.uppercase()
+                    .addOnCompleteListener { result ->
+                        if (result.isSuccessful) {
+                            val foundString =
+                                result.result.text.uppercase().filterNot { it.isWhitespace() }
                             if (foundString.isNotEmpty()) {
-                                var foundPattern = regex.find(foundString)?.value
+                                var foundPattern = regex?.find(foundString)?.value
 
                                 if (foundPattern == null) {
-                                    foundPattern =
-                                        regexService.switchSigns(foundString, regexString, regex)
+                                    foundPattern = regexService.switchSigns(foundString, regex!!)
                                 }
 
                                 if (foundPattern != null) {
@@ -60,5 +59,4 @@ class ImageAnalyzer(
             }
         }
     }
-
 }
