@@ -6,10 +6,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
+import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.domain.usecase.DeleteObject
 import pl.polsl.stocktakingApp.domain.usecase.UpsertObject
 import pl.polsl.stocktakingApp.presentation.common.BaseViewModel
+import pl.polsl.stocktakingApp.presentation.common.Event
 import javax.inject.Inject
 
 @HiltViewModel
@@ -61,15 +63,20 @@ class ModifyObjectScreenViewModel @Inject constructor(
 
     fun upsertObject() =
         launch {
-            _upsertObject(
-                StocktakingObject(
-                    _id.value,
-                    _name.value,
-                    _description.value,
-                    _amount.value,
-                    _barcode.value
+            if (_name.value.isNotBlank() && _barcode.value.isNotBlank()) {
+                _upsertObject(
+                    StocktakingObject(
+                        _id.value,
+                        _name.value,
+                        _description.value,
+                        _amount.value,
+                        _barcode.value
+                    )
                 )
-            )
+                _events.emit(ObjectUpsertSuccess)
+            } else {
+                _events.emit(EmptyFields)
+            }
         }
 
     fun deleteObject() = launch {
@@ -101,6 +108,9 @@ class ModifyObjectScreenViewModel @Inject constructor(
     fun setAmount(amount: Int) {
         _amount.update { amount }
     }
+
+    object EmptyFields : Event.Message(R.string.EmptyFieldsEvent)
+    object ObjectUpsertSuccess : Event()
 }
 
 sealed class ModifyObjectScreenState {
