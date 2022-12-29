@@ -51,7 +51,7 @@ class TextScannerScreenViewModel @Inject constructor(
                     var foundPattern = regex.find(foundString)?.value
 
                     if (foundPattern == null) {
-                        foundPattern = _regexService.switchSigns(foundString, regexString, regex)
+                        foundPattern = _regexService.switchSigns(foundString, regex)
                     }
 
                     if (foundPattern != null) {
