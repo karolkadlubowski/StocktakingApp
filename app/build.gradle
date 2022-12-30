@@ -123,6 +123,15 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+
+    def mockkVersion = "1.12.4"
+    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("io.mockk:mockk-agent-jvm:$mockkVersion}")
+
+    //test
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2")
+    testImplementation(platform("org.junit:junit-bom:5.8.2"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
 kapt {
