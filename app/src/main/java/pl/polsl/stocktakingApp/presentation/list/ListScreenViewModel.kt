@@ -14,9 +14,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListScreenViewModel @Inject constructor(
-    private val printLabel: PrintLabel,
-    private val getLabelCodeType: GetLabelCodeType,
-    private val getSelectedPrinter: GetSelectedPrinter,
+    private val _printLabel: PrintLabel,
+    private val _getLabelCodeType: GetLabelCodeType,
+    private val _getSelectedPrinter: GetSelectedPrinter,
     _observeRegex: ObserveExampleNumber,
     _observeObjectList: ObserveObjectList,
     _coroutineDispatcher: CoroutineDispatcher
@@ -42,23 +42,25 @@ class ListScreenViewModel @Inject constructor(
     }
 
     fun printLabel(stocktakingObject: StocktakingObject) = launch {
-        val selectedPrinter = getSelectedPrinter(Unit)
+        val selectedPrinter = _getSelectedPrinter(Unit)
 
         if (selectedPrinter != null) {
-            if (printLabel.invoke(
+            if (_printLabel.invoke(
                     PrintLabel.Params(
                         selectedPrinter,
                         stocktakingObject,
-                        getLabelCodeType(Unit)
+                        _getLabelCodeType(Unit)
                     )
                 ) !is Result.Successful
             ) {
-                _events.emit(Event.Message(R.string.printLabelError))
+                _events.emit(PrintLabelError)
             }
         } else {
             _events.emit(Event.NoSelectedPrinter)
         }
     }
+
+    object PrintLabelError : Event.Message(R.string.printLabelError)
 }
 
 sealed class ListScreenState {
