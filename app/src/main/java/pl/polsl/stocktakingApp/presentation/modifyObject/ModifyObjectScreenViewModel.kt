@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.data.models.StocktakingObject
-import pl.polsl.stocktakingApp.domain.usecase.CheckIfObjectExists
 import pl.polsl.stocktakingApp.domain.usecase.DeleteObject
+import pl.polsl.stocktakingApp.domain.usecase.GetObjectByBarcode
 import pl.polsl.stocktakingApp.domain.usecase.UpsertObject
 import pl.polsl.stocktakingApp.presentation.common.BaseViewModel
 import pl.polsl.stocktakingApp.presentation.common.Event
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class ModifyObjectScreenViewModel @Inject constructor(
     private val _upsertObject: UpsertObject,
     private val _deleteObject: DeleteObject,
-    private val _checkIfObjectExists: CheckIfObjectExists,
+    private val _getObjectByBarcode: GetObjectByBarcode,
     _coroutineDispatcher: CoroutineDispatcher
 ) : BaseViewModel<ModifyObjectScreenState>(_coroutineDispatcher) {
     override val initialState: ModifyObjectScreenState = ModifyObjectScreenState.InitialState
@@ -64,7 +64,7 @@ class ModifyObjectScreenViewModel @Inject constructor(
 
     fun upsertObject() =
         launch {
-            if (_checkIfObjectExists(_barcode.value) && state.value is ModifyObjectScreenState.AddObjectState) {
+            if (_getObjectByBarcode(_barcode.value) != null && state.value is ModifyObjectScreenState.AddObjectState) {
                 _events.emit(ObjectAlreadyExists)
                 return@launch
             }

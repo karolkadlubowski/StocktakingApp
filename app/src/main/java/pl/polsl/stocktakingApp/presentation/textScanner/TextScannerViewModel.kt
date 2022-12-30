@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import pl.polsl.stocktakingApp.R
+import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.domain.services.RegexService
+import pl.polsl.stocktakingApp.domain.usecase.GetObjectByBarcode
 import pl.polsl.stocktakingApp.domain.usecase.ObserveExampleNumber
 import pl.polsl.stocktakingApp.presentation.common.BaseViewModel
 import pl.polsl.stocktakingApp.presentation.common.Event
@@ -21,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TextScannerScreenViewModel @Inject constructor(
     private val _regexService: RegexService,
+    private val _getObjectByBarcode: GetObjectByBarcode,
     _observeRegex: ObserveExampleNumber,
     _coroutineDispatcher: CoroutineDispatcher
 ) : BaseViewModel<TextScannerScreenState>(_coroutineDispatcher) {
@@ -35,8 +38,8 @@ class TextScannerScreenViewModel @Inject constructor(
         _state.value = TextScannerScreenState.Cropping(photoUri)
     }
 
-    fun onIdFound(id: String) {
-        _state.value = TextScannerScreenState.Found(id)
+    fun onNumberFound(objectNumber: String) {
+        _state.value = TextScannerScreenState.Found(objectNumber)
     }
 
     fun analyzePhoto(inputImage: InputImage) = launch {
@@ -79,6 +82,18 @@ class TextScannerScreenViewModel @Inject constructor(
     fun continueScanning() {
         _state.value = TextScannerScreenState.Scanning
     }
+
+    fun onBarcodeRecognized(number: String) = launch {
+        val stocktakingObject = _getObjectByBarcode(number)
+        if (stocktakingObject != null) {
+            _events.emit(ObjectExists(stocktakingObject))
+        } else {
+            _events.emit((ObjectNotExists))
+        }
+    }
+
+    object ObjectNotExists : Event.Message(R.string.ObjectNotExistsEvent)
+    data class ObjectExists(val stocktakingObject: StocktakingObject) : Event()
 }
 
 sealed class TextScannerScreenState {

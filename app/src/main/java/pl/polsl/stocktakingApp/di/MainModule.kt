@@ -159,6 +159,6 @@ object MainModule {
 
     @Provides
     @Singleton
-    fun providesCheckIfObjectExists(stocktakingRepository: StocktakingRepository): CheckIfObjectExists =
-        CheckIfObjectExistsImpl(stocktakingRepository)
+    fun providesCheckIfObjectExists(stocktakingRepository: StocktakingRepository): GetObjectByBarcode =
+        GetObjectByBarcodeImpl(stocktakingRepository)
 }

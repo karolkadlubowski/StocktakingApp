@@ -14,7 +14,8 @@ class ImageAnalyzer(
     private val onRegexFound: (String) -> Unit,
     private val regexString: String?,
     private val regexService: RegexService = RegexService(),
-    private val barcodeScanner: BarcodeScanner
+    private val barcodeScanner: BarcodeScanner,
+    private val onNumberFromBarcodeFound: (String) -> Unit
 ) : ImageAnalysis.Analyzer {
     private val regex = regexString?.let { regexService.rewriteStringToRegex(it) }
 
@@ -28,7 +29,7 @@ class ImageAnalyzer(
             barcodeScanner.process(image)
                 .addOnSuccessListener { barcodes ->
                     if (barcodes.isNotEmpty()) {
-                        barcodes[0].rawValue?.let { onRegexFound(it.uppercase()) }
+                        barcodes[0].rawValue?.let { onNumberFromBarcodeFound(it.uppercase()) }
                         imageProxy.close()
                     }
                 }.addOnFailureListener {

@@ -36,7 +36,8 @@ fun MLKitTextRecognition(
     onTextRecognized: (String) -> Unit,
     regex: String?,
     onBackPressed: () -> Unit,
-    barcodeScanner: BarcodeScanner
+    barcodeScanner: BarcodeScanner,
+    onBarcodeRecognized: (String) -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -58,7 +59,8 @@ fun MLKitTextRecognition(
             imageCapture = imageCapture,
             textRecognizer = textRecognizer,
             regex = regex,
-            barcodeScanner = barcodeScanner
+            barcodeScanner = barcodeScanner,
+            onBarcodeRecognized = onBarcodeRecognized
         )
 
         IconButton(
@@ -90,7 +92,8 @@ fun TextRecognitionView(
     imageCapture: ImageCapture,
     textRecognizer: TextRecognizer,
     regex: String?,
-    barcodeScanner: BarcodeScanner
+    barcodeScanner: BarcodeScanner,
+    onBarcodeRecognized: (String) -> Unit
 ) {
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     var preview by remember { mutableStateOf<Preview?>(null) }
@@ -115,7 +118,8 @@ fun TextRecognitionView(
                                     textRecognizer,
                                     onTextRecognized,
                                     regex,
-                                    barcodeScanner = barcodeScanner
+                                    barcodeScanner = barcodeScanner,
+                                    onNumberFromBarcodeFound = onBarcodeRecognized
                                 )
                             )
                         }

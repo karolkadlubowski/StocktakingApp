@@ -31,7 +31,7 @@ class StocktakingRepository(
         _stocktakingDao.delete(stocktakingObject)
     }
 
-    suspend fun checkIfObjectWithBarcodeExists(barcode: String): Boolean {
-        return _stocktakingDao.getObjectAmountWithBarcode(barcode) != 0
+    suspend fun getObjectByBarcode(barcode: String): StocktakingObject? {
+        return _stocktakingDao.getObjectByBarcode(barcode)
     }
 }
