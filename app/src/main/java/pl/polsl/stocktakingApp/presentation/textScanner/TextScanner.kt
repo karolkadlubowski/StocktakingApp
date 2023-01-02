@@ -24,6 +24,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.text.TextRecognizer
 import pl.polsl.stocktakingApp.R
+import pl.polsl.stocktakingApp.domain.services.ImageAnalyzer
 import pl.polsl.stocktakingApp.ui.theme.C
 import java.io.File
 import java.util.concurrent.Executors
@@ -36,7 +37,8 @@ fun MLKitTextRecognition(
     onTextRecognized: (String) -> Unit,
     regex: String?,
     onBackPressed: () -> Unit,
-    barcodeScanner: BarcodeScanner
+    barcodeScanner: BarcodeScanner,
+    onBarcodeRecognized: (String) -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -58,7 +60,8 @@ fun MLKitTextRecognition(
             imageCapture = imageCapture,
             textRecognizer = textRecognizer,
             regex = regex,
-            barcodeScanner = barcodeScanner
+            barcodeScanner = barcodeScanner,
+            onBarcodeRecognized = onBarcodeRecognized
         )
 
         IconButton(
@@ -90,7 +93,8 @@ fun TextRecognitionView(
     imageCapture: ImageCapture,
     textRecognizer: TextRecognizer,
     regex: String?,
-    barcodeScanner: BarcodeScanner
+    barcodeScanner: BarcodeScanner,
+    onBarcodeRecognized: (String) -> Unit
 ) {
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     var preview by remember { mutableStateOf<Preview?>(null) }
@@ -115,7 +119,8 @@ fun TextRecognitionView(
                                     textRecognizer,
                                     onTextRecognized,
                                     regex,
-                                    barcodeScanner = barcodeScanner
+                                    barcodeScanner = barcodeScanner,
+                                    onNumberFromBarcodeFound = onBarcodeRecognized
                                 )
                             )
                         }

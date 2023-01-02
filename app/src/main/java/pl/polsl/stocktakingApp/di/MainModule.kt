@@ -156,4 +156,9 @@ object MainModule {
     @Provides
     @Singleton
     fun providesRegexService(): RegexService = RegexService()
+
+    @Provides
+    @Singleton
+    fun providesCheckIfObjectExists(stocktakingRepository: StocktakingRepository): GetObjectByBarcode =
+        GetObjectByBarcodeImpl(stocktakingRepository)
 }
