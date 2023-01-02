@@ -1,8 +1,8 @@
 package pl.polsl.stocktakingApp.domain.usecase
 
-import pl.polsl.printer.BluetoothService
-import pl.polsl.printer.Result
+import pl.polsl.stocktakingApp.common.Result
 import pl.polsl.stocktakingApp.domain.SuspendUseCase
+import pl.polsl.stocktakingApp.domain.services.BluetoothService
 
 interface ProvideBluetoothConnection : SuspendUseCase<Unit, Result>
 

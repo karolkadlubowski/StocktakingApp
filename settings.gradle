@@ -15,4 +15,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "StocktakingApp"
 include ':app'
-include ':printer'

@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
-import pl.polsl.printer.DataResult
-import pl.polsl.printer.Result
 import pl.polsl.stocktakingApp.R
+import pl.polsl.stocktakingApp.common.DataResult
+import pl.polsl.stocktakingApp.common.Result
 import pl.polsl.stocktakingApp.data.models.BluetoothDevice
 import pl.polsl.stocktakingApp.domain.usecase.*
 import pl.polsl.stocktakingApp.presentation.common.BaseViewModel
@@ -66,22 +66,18 @@ class ConfigScreenViewModel @Inject constructor(
     }
 
     suspend fun updateListOfBondedDevices() {
-        try {
-            if (_provideBluetoothConnection(Unit) !is Result.Successful) {
-                _events.emit(Event.Message(R.string.bluetoothEnablingError))
-                return
-            }
-
-            val result = _getBondedDevices(Unit)
-            if (result !is DataResult.Successful) {
-                _events.emit(Event.Message(R.string.getBondedDevicesError))
-                return
-            }
-
-            _bondedDeviceList.update { result.data }
-        } catch (e: Exception) {
-            e
+        if (_provideBluetoothConnection(Unit) !is Result.Successful) {
+            _events.emit(Event.BluetoothError)
+            return
         }
+
+        val result = _getBondedDevices(Unit)
+        if (result !is DataResult.Successful) {
+            _events.emit(Event.Message(R.string.getBondedDevicesError))
+            return
+        }
+
+        _bondedDeviceList.update { result.data }
     }
 }
 

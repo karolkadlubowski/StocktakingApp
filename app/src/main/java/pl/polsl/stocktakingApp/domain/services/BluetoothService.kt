@@ -1,4 +1,4 @@
-package pl.polsl.printer
+package pl.polsl.stocktakingApp.domain.services
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -15,6 +15,9 @@ import com.zebra.sdk.printer.PrinterLanguage
 import com.zebra.sdk.printer.ZebraPrinter
 import com.zebra.sdk.printer.ZebraPrinterFactory
 import kotlinx.coroutines.delay
+import pl.polsl.stocktakingApp.common.DataResult
+import pl.polsl.stocktakingApp.common.Result
+import pl.polsl.stocktakingApp.common.addData
 import timber.log.Timber
 import java.io.IOException
 

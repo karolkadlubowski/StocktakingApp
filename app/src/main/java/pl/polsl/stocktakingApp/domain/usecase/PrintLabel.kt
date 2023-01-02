@@ -1,10 +1,10 @@
 package pl.polsl.stocktakingApp.domain.usecase
 
-import pl.polsl.printer.BluetoothService
-import pl.polsl.printer.LabelLineDividerService
-import pl.polsl.printer.Result
+import pl.polsl.stocktakingApp.common.Result
 import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.domain.UseCase
+import pl.polsl.stocktakingApp.domain.services.BluetoothService
+import pl.polsl.stocktakingApp.domain.services.LabelLineDividerService
 import pl.polsl.stocktakingApp.presentation.configuration.CodeType
 
 interface PrintLabel : UseCase<PrintLabel.Params, Result> {

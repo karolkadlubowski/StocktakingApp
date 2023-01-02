@@ -3,9 +3,9 @@ package pl.polsl.stocktakingApp.presentation.list
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
-import pl.polsl.printer.Result
 import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.common.DataFlow
+import pl.polsl.stocktakingApp.common.Result
 import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.domain.usecase.*
 import pl.polsl.stocktakingApp.presentation.common.BaseViewModel
@@ -17,6 +17,7 @@ class ListScreenViewModel @Inject constructor(
     private val _printLabel: PrintLabel,
     private val _getLabelCodeType: GetLabelCodeType,
     private val _getSelectedPrinter: GetSelectedPrinter,
+    private val _provideBluetoothConnection: ProvideBluetoothConnection,
     _observeRegex: ObserveExampleNumber,
     _observeObjectList: ObserveObjectList,
     _coroutineDispatcher: CoroutineDispatcher
@@ -42,6 +43,12 @@ class ListScreenViewModel @Inject constructor(
     }
 
     fun printLabel(stocktakingObject: StocktakingObject) = launch {
+
+        if (_provideBluetoothConnection(Unit) !is Result.Successful) {
+            _events.emit(Event.BluetoothError)
+            return@launch
+        }
+
         val selectedPrinter = _getSelectedPrinter(Unit)
 
         if (selectedPrinter != null) {
