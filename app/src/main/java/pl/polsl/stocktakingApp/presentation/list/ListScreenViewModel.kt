@@ -17,6 +17,7 @@ class ListScreenViewModel @Inject constructor(
     private val _printLabel: PrintLabel,
     private val _getLabelCodeType: GetLabelCodeType,
     private val _getSelectedPrinter: GetSelectedPrinter,
+    private val _provideBluetoothConnection: ProvideBluetoothConnection,
     _observeRegex: ObserveExampleNumber,
     _observeObjectList: ObserveObjectList,
     _coroutineDispatcher: CoroutineDispatcher
@@ -42,6 +43,11 @@ class ListScreenViewModel @Inject constructor(
     }
 
     fun printLabel(stocktakingObject: StocktakingObject) = launch {
+
+        if (_provideBluetoothConnection(Unit) !is Result.Successful) {
+            _events.emit(Event.BluetoothError)
+        }
+
         val selectedPrinter = _getSelectedPrinter(Unit)
 
         if (selectedPrinter != null) {

@@ -66,22 +66,18 @@ class ConfigScreenViewModel @Inject constructor(
     }
 
     suspend fun updateListOfBondedDevices() {
-        try {
-            if (_provideBluetoothConnection(Unit) !is Result.Successful) {
-                _events.emit(Event.Message(R.string.bluetoothEnablingError))
-                return
-            }
-
-            val result = _getBondedDevices(Unit)
-            if (result !is DataResult.Successful) {
-                _events.emit(Event.Message(R.string.getBondedDevicesError))
-                return
-            }
-
-            _bondedDeviceList.update { result.data }
-        } catch (e: Exception) {
-            e
+        if (_provideBluetoothConnection(Unit) !is Result.Successful) {
+            _events.emit(Event.BluetoothError)
+            return
         }
+
+        val result = _getBondedDevices(Unit)
+        if (result !is DataResult.Successful) {
+            _events.emit(Event.Message(R.string.getBondedDevicesError))
+            return
+        }
+
+        _bondedDeviceList.update { result.data }
     }
 }
 
