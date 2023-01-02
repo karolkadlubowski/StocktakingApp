@@ -70,8 +70,8 @@ object MainModule {
 
     @Provides
     @Singleton
-    fun providesGetBondedDevicesUseCase(bluetoothService: BluetoothService): GetBondedDevices =
-        GetBondedDevicesImpl(bluetoothService)
+    fun providesGetBondedDevicesUseCase(bluetoothService: BluetoothService): GetBoundDevices =
+        GetBoundDevicesImpl(bluetoothService)
 
     @Provides
     @Singleton

@@ -86,14 +86,12 @@ class ModifyObjectScreenViewModel @Inject constructor(
 
     fun deleteObject() = launch {
         _deleteObject(
-            DeleteObject.Params(
-                StocktakingObject(
-                    _id.value,
-                    _name.value,
-                    _description.value,
-                    _amount.value.toInt(),
-                    _barcode.value
-                )
+            StocktakingObject(
+                _id.value,
+                _name.value,
+                _description.value,
+                _amount.value.toInt(),
+                _barcode.value
             )
         )
     }
