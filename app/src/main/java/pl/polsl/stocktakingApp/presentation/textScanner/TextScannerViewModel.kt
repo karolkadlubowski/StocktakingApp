@@ -43,7 +43,7 @@ class TextScannerScreenViewModel @Inject constructor(
     }
 
     fun analyzePhoto(inputImage: InputImage) = launch {
-        deletePhoto()
+        _deletePhoto()
         val regexString = _regex.first()
 
         _recognizer.process(inputImage)
@@ -72,7 +72,7 @@ class TextScannerScreenViewModel @Inject constructor(
             }
     }
 
-    private fun deletePhoto() {
+    private fun _deletePhoto() {
         val state = _state.value
         if (state is TextScannerScreenState.Cropping) {
             state.takenPhotoUri.toFile().delete()
@@ -83,8 +83,8 @@ class TextScannerScreenViewModel @Inject constructor(
         _state.value = TextScannerScreenState.Scanning
     }
 
-    fun onBarcodeRecognized(number: String) = launch {
-        val stocktakingObject = _getObjectByBarcode(number)
+    fun onBarcodeRecognized(barcode: String) = launch {
+        val stocktakingObject = _getObjectByBarcode(barcode)
         if (stocktakingObject != null) {
             _events.emit(ObjectExists(stocktakingObject))
         } else {
@@ -99,5 +99,5 @@ class TextScannerScreenViewModel @Inject constructor(
 sealed class TextScannerScreenState {
     object Scanning : TextScannerScreenState()
     data class Cropping(val takenPhotoUri: Uri) : TextScannerScreenState()
-    data class Found(val foundId: String) : TextScannerScreenState()
+    data class Found(val foundNumber: String) : TextScannerScreenState()
 }

@@ -80,7 +80,7 @@ class ModifyObjectScreenViewModel @Inject constructor(
                 )
                 _events.emit(ObjectUpsertSuccess)
             } else {
-                _events.emit(EmptyFields)
+                _events.emit(EmptyTextFields)
             }
         }
 
@@ -114,7 +114,7 @@ class ModifyObjectScreenViewModel @Inject constructor(
         _amount.update { amount }
     }
 
-    object EmptyFields : Event.Message(R.string.EmptyFieldsEvent)
+    object EmptyTextFields : Event.Message(R.string.EmptyFieldsEvent)
     object ObjectUpsertSuccess : Event()
     object ObjectAlreadyExists : Event.Message(R.string.ObjectAlreadyExistsEvent)
 }

@@ -24,6 +24,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.text.TextRecognizer
 import pl.polsl.stocktakingApp.R
+import pl.polsl.stocktakingApp.domain.services.ImageAnalyzer
 import pl.polsl.stocktakingApp.ui.theme.C
 import java.io.File
 import java.util.concurrent.Executors

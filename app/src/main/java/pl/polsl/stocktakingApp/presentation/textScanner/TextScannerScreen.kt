@@ -91,7 +91,7 @@ fun TextScannerScreen(
             is TextScannerScreenState.Found -> {
                 navigator.navigate(
                     ModifyObjectScreenDestination(
-                        (state as TextScannerScreenState.Found).foundId
+                        (state as TextScannerScreenState.Found).foundNumber
                     )
                 )
 

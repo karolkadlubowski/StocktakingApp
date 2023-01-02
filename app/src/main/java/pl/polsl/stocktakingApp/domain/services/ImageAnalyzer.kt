@@ -1,4 +1,4 @@
-package pl.polsl.stocktakingApp.presentation.textScanner
+package pl.polsl.stocktakingApp.domain.services
 
 import android.annotation.SuppressLint
 import androidx.camera.core.ImageAnalysis
@@ -6,7 +6,6 @@ import androidx.camera.core.ImageProxy
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognizer
-import pl.polsl.stocktakingApp.domain.services.RegexService
 
 
 class ImageAnalyzer(
