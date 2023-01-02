@@ -48,23 +48,9 @@ class TextScannerScreenViewModel @Inject constructor(
 
         _recognizer.process(inputImage)
             .addOnSuccessListener { visionText ->
-                val foundString = visionText.text
-                if (regexString != null) {
-                    val regex = _regexService.rewriteStringToRegex(regexString)
-                    var foundPattern = regex.find(foundString)?.value
-
-                    if (foundPattern == null) {
-                        foundPattern = _regexService.switchSigns(foundString, regex)
-                    }
-
-                    if (foundPattern != null) {
-                        _state.value = TextScannerScreenState.Found(foundPattern)
-                    } else {
-                        _state.value = TextScannerScreenState.Found(foundString)
-                    }
-                } else {
-                    _state.value = TextScannerScreenState.Found(foundString)
-                }
+                val foundString =
+                    _regexService.returnRegexStringFromString(regexString, visionText.text)
+                _state.value = TextScannerScreenState.Found(foundString)
             }
             .addOnFailureListener { e ->
                 _state.value = TextScannerScreenState.Scanning

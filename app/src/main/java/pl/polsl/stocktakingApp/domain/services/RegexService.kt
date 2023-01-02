@@ -4,6 +4,21 @@ class RegexService {
     private val letterRegex = "[a-zA-Z]"
     private val digitRegex = "\\d"
 
+    fun returnRegexStringFromString(regexString: String?, foundString: String): String {
+        return if (regexString != null) {
+            val regex = rewriteStringToRegex(regexString)
+            var foundPattern = regex.find(foundString)?.value
+
+            if (foundPattern == null) {
+                foundPattern = switchSigns(foundString, regex)
+            }
+
+            foundPattern ?: foundString
+        } else {
+            foundString
+        }
+    }
+
     fun rewriteStringToRegex(text: String): Regex {
         val string = text.filterNot { it.isWhitespace() }
 

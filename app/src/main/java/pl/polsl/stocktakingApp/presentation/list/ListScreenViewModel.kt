@@ -51,19 +51,21 @@ class ListScreenViewModel @Inject constructor(
 
         val selectedPrinter = _getSelectedPrinter(Unit)
 
-        if (selectedPrinter != null) {
-            if (_printLabel.invoke(
-                    PrintLabel.Params(
-                        selectedPrinter,
-                        stocktakingObject,
-                        _getLabelCodeType(Unit)
-                    )
-                ) !is Result.Successful
-            ) {
-                _events.emit(PrintLabelError)
-            }
-        } else {
+        if (selectedPrinter == null) {
             _events.emit(Event.NoSelectedPrinter)
+            return@launch
+        }
+
+
+        if (_printLabel.invoke(
+                PrintLabel.Params(
+                    selectedPrinter,
+                    stocktakingObject,
+                    _getLabelCodeType(Unit)
+                )
+            ) !is Result.Successful
+        ) {
+            _events.emit(PrintLabelError)
         }
     }
 
