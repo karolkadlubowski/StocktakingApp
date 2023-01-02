@@ -4,9 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import pl.polsl.stocktakingApp.data.settings.Settings
 import pl.polsl.stocktakingApp.domain.UseCase
 
-interface ObserveSelectedPrinter : UseCase<Unit, Flow<String?>>
-
-internal class ObserveSelectedPrinterImpl(private val settings: Settings) :
-    ObserveSelectedPrinter {
+class ObserveSelectedPrinter(private val settings: Settings) :
+    UseCase<Unit, Flow<String?>> {
     override fun invoke(input: Unit): Flow<String?> = settings.observeSelectedPrinter()
 }
