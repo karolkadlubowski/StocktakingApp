@@ -114,11 +114,11 @@ fun TextRecognitionView(
                         setAnalyzer(
                             cameraExecutor,
                             LiveImageAnalyzer(
-                                textRecognizer = textRecognizer,
-                                onRegexFound = onTextRecognized,
-                                regexString = regex,
-                                barcodeScanner = barcodeScanner,
-                                onNumberFromBarcodeFound = onBarcodeRecognized
+                                _textRecognizer = textRecognizer,
+                                _onRegexFound = onTextRecognized,
+                                _regexString = regex,
+                                _barcodeScanner = barcodeScanner,
+                                _onNumberFromBarcodeFound = onBarcodeRecognized
                             )
                         )
                     }
