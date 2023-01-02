@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.core.net.toFile
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -32,7 +33,8 @@ class TextScannerScreenViewModel @Inject constructor(
 
     private var _regex: Flow<String?> = _observeRegex(Unit)
 
-    private val _recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+    private val _recognizer: TextRecognizer =
+        TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
     fun onPhotoTaken(photoUri: Uri) {
         _state.value = TextScannerScreenState.Cropping(photoUri)

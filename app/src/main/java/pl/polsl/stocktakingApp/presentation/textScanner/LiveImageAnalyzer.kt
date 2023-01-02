@@ -9,11 +9,11 @@ import com.google.mlkit.vision.text.TextRecognizer
 import pl.polsl.stocktakingApp.domain.services.RegexService
 
 class LiveImageAnalyzer(
-    private val textRecognizer: TextRecognizer,
-    private val onRegexFound: (String) -> Unit,
-    private val regexString: String?,
-    private val barcodeScanner: BarcodeScanner,
-    private val onNumberFromBarcodeFound: (String) -> Unit
+    private val _textRecognizer: TextRecognizer,
+    private val _onRegexFound: (String) -> Unit,
+    private val _regexString: String?,
+    private val _barcodeScanner: BarcodeScanner,
+    private val _onNumberFromBarcodeFound: (String) -> Unit
 ) : ImageAnalysis.Analyzer {
 
     private val _regexService: RegexService = RegexService()
@@ -25,27 +25,27 @@ class LiveImageAnalyzer(
             val image =
                 InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
 
-            barcodeScanner.process(image)
+            _barcodeScanner.process(image)
                 .addOnSuccessListener { barcodes ->
                     if (barcodes.isNotEmpty()) {
-                        barcodes[0].rawValue?.let { onNumberFromBarcodeFound(it.uppercase()) }
+                        barcodes[0].rawValue?.let { _onNumberFromBarcodeFound(it.uppercase()) }
                         imageProxy.close()
                     }
                 }.addOnFailureListener {
                     imageProxy.close()
                 }
 
-            if (!regexString.isNullOrEmpty()) {
-                textRecognizer.process(image)
+            if (!_regexString.isNullOrEmpty()) {
+                _textRecognizer.process(image)
                     .addOnCompleteListener { result ->
                         if (result.isSuccessful) {
                             val foundString = _regexService.returnRegexStringOrNullFromString(
-                                regexString,
+                                _regexString,
                                 result.result.text
                             )
 
                             if (foundString != null) {
-                                onRegexFound(foundString)
+                                _onRegexFound(foundString)
                             }
                         }
                         imageProxy.close()
