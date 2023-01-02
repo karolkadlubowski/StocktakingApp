@@ -46,6 +46,7 @@ class ListScreenViewModel @Inject constructor(
 
         if (_provideBluetoothConnection(Unit) !is Result.Successful) {
             _events.emit(Event.BluetoothError)
+            return@launch
         }
 
         val selectedPrinter = _getSelectedPrinter(Unit)

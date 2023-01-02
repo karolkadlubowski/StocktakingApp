@@ -24,6 +24,7 @@ class ListScreenViewModelTest : BaseTest<ListScreenViewModel>() {
     private val getSelectedPrinter: GetSelectedPrinter = mockk()
     private val observeRegex: ObserveExampleNumber = mockk()
     private val observeObjectList: ObserveObjectList = mockk()
+    private val provideBluetoothConnection: ProvideBluetoothConnection = mockk()
 
     override val mocks: Array<Any> = arrayOf(
         printLabel, getLabelCodeType, getSelectedPrinter, observeObjectList, observeRegex
@@ -34,6 +35,7 @@ class ListScreenViewModelTest : BaseTest<ListScreenViewModel>() {
             printLabel,
             getLabelCodeType,
             getSelectedPrinter,
+            provideBluetoothConnection,
             observeRegex,
             observeObjectList,
             coroutinesTestRule.testDispatcher
@@ -78,6 +80,7 @@ class ListScreenViewModelTest : BaseTest<ListScreenViewModel>() {
         every { observeObjectList.invoke(any()) } returns flowOf(StreamData.Ready(listOf()))
         every { observeRegex.invoke(Unit) } returns flowOf("")
         coEvery { getSelectedPrinter(Unit) } returns null
+        coEvery { provideBluetoothConnection(Unit) } returns pl.polsl.printer.Result.Successful
 
         initService()
 
@@ -93,6 +96,7 @@ class ListScreenViewModelTest : BaseTest<ListScreenViewModel>() {
         verify(exactly = 1) { observeObjectList.invoke(any()) }
         verify(exactly = 1) { observeRegex.invoke(Unit) }
         coVerify(exactly = 1) { getSelectedPrinter(Unit) }
+        coVerify(exactly = 1) { provideBluetoothConnection(Unit) }
     }
 
     @Test
@@ -104,6 +108,7 @@ class ListScreenViewModelTest : BaseTest<ListScreenViewModel>() {
         every { observeRegex.invoke(Unit) } returns flowOf("")
         coEvery { getSelectedPrinter(Unit) } returns printerAddress
         coEvery { getLabelCodeType(Unit) } returns labelType
+        coEvery { provideBluetoothConnection(Unit) } returns pl.polsl.printer.Result.Successful
         every { printLabel(any()) } returns pl.polsl.printer.Result.Successful
 
         initService()
@@ -114,6 +119,7 @@ class ListScreenViewModelTest : BaseTest<ListScreenViewModel>() {
         verify(exactly = 1) { observeRegex.invoke(Unit) }
         coVerify(exactly = 1) { getSelectedPrinter(Unit) }
         coVerify(exactly = 1) { getLabelCodeType(Unit) }
+        coVerify(exactly = 1) { provideBluetoothConnection(Unit) }
         coVerify(exactly = 1) { printLabel(any()) }
     }
 
@@ -127,6 +133,7 @@ class ListScreenViewModelTest : BaseTest<ListScreenViewModel>() {
             every { observeRegex.invoke(Unit) } returns flowOf("")
             coEvery { getSelectedPrinter(Unit) } returns printerAddress
             coEvery { getLabelCodeType(Unit) } returns labelType
+            coEvery { provideBluetoothConnection(Unit) } returns pl.polsl.printer.Result.Successful
             every { printLabel(any()) } returns pl.polsl.printer.Result.Error.BluetoothConnection
 
             initService()
@@ -143,7 +150,31 @@ class ListScreenViewModelTest : BaseTest<ListScreenViewModel>() {
             verify(exactly = 1) { observeRegex.invoke(Unit) }
             coVerify(exactly = 1) { getSelectedPrinter(Unit) }
             coVerify(exactly = 1) { getLabelCodeType(Unit) }
+            coVerify(exactly = 1) { provideBluetoothConnection(Unit) }
             coVerify(exactly = 1) { printLabel(any()) }
+        }
+
+    @Test
+    fun `when print invoked but bluetooth provider returns error, emit error event`() =
+        runTestIn {
+
+            every { observeObjectList.invoke(any()) } returns flowOf(StreamData.Ready(listOf()))
+            every { observeRegex.invoke(Unit) } returns flowOf("")
+            coEvery { provideBluetoothConnection(Unit) } returns pl.polsl.printer.Result.Error.BluetoothEnabling
+
+            initService()
+            service.events.test {
+                service.printLabel(stocktakingObject = stocktakingObject)
+                assertEquals(
+                    Event.BluetoothError,
+                    awaitItem()
+                )
+                cancelAndIgnoreRemainingEvents()
+            }
+
+            verify(exactly = 1) { observeObjectList.invoke(any()) }
+            verify(exactly = 1) { observeRegex.invoke(Unit) }
+            coVerify(exactly = 1) { provideBluetoothConnection(Unit) }
         }
 
     companion object {
