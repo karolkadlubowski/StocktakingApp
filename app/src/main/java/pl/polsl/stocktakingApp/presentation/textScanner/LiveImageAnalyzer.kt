@@ -8,16 +8,15 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognizer
 import pl.polsl.stocktakingApp.domain.services.RegexService
 
-
 class LiveImageAnalyzer(
     private val textRecognizer: TextRecognizer,
     private val onRegexFound: (String) -> Unit,
     private val regexString: String?,
-    private val regexService: RegexService = RegexService(),
     private val barcodeScanner: BarcodeScanner,
     private val onNumberFromBarcodeFound: (String) -> Unit
 ) : ImageAnalysis.Analyzer {
-    private val regex = regexString?.let { regexService.rewriteStringToRegex(it) }
+
+    private val _regexService: RegexService = RegexService()
 
     @SuppressLint("UnsafeOptInUsageError")
     override fun analyze(imageProxy: ImageProxy) {
@@ -40,18 +39,13 @@ class LiveImageAnalyzer(
                 textRecognizer.process(image)
                     .addOnCompleteListener { result ->
                         if (result.isSuccessful) {
-                            val foundString =
-                                result.result.text.uppercase().filterNot { it.isWhitespace() }
-                            if (foundString.isNotEmpty()) {
-                                var foundPattern = regex?.find(foundString)?.value
+                            val foundString = _regexService.returnRegexStringOrNullFromString(
+                                regexString,
+                                result.result.text
+                            )
 
-                                if (foundPattern == null) {
-                                    foundPattern = regexService.switchSigns(foundString, regex!!)
-                                }
-
-                                if (foundPattern != null) {
-                                    onRegexFound(foundPattern)
-                                }
+                            if (foundString != null) {
+                                onRegexFound(foundString)
                             }
                         }
                         imageProxy.close()

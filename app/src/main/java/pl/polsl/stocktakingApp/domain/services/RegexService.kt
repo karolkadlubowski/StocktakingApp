@@ -7,7 +7,7 @@ class RegexService {
     fun returnRegexStringFromString(regexString: String?, foundString: String): String {
         return if (regexString != null) {
             val regex = rewriteStringToRegex(regexString)
-            var foundPattern = regex.find(foundString)?.value
+            var foundPattern = regex.find(foundString.uppercase())?.value
 
             if (foundPattern == null) {
                 foundPattern = switchSigns(foundString, regex)
@@ -19,7 +19,22 @@ class RegexService {
         }
     }
 
-    fun rewriteStringToRegex(text: String): Regex {
+    fun returnRegexStringOrNullFromString(regexString: String?, foundString: String): String? {
+        return if (regexString != null) {
+            val regex = rewriteStringToRegex(regexString)
+            var foundPattern = regex.find(foundString.uppercase())?.value
+
+            if (foundPattern == null) {
+                foundPattern = switchSigns(foundString, regex)
+            }
+
+            foundPattern
+        } else {
+            null
+        }
+    }
+
+    private fun rewriteStringToRegex(text: String): Regex {
         val string = text.filterNot { it.isWhitespace() }
 
         val regexStringBuilder = StringBuilder()
@@ -37,7 +52,7 @@ class RegexService {
         return regexStringBuilder.toString().toRegex()
     }
 
-    fun switchSigns(scannedString: String, regex: Regex): String? {
+    private fun switchSigns(scannedString: String, regex: Regex): String? {
         val dReplacedForZero = scannedString.replace('D', '0')
         val oReplacedForZero = dReplacedForZero.replace('O', '0')
         return regex.find(oReplacedForZero)?.value

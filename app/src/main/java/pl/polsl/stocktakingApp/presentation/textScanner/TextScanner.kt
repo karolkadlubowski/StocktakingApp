@@ -100,46 +100,46 @@ fun TextRecognitionView(
     val cameraProvider = cameraProviderFuture.get()
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
 
-        AndroidView(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            factory = { ctx ->
-                val previewView = PreviewView(ctx)
-                cameraProviderFuture.addListener({
-                    val imageAnalysis = ImageAnalysis.Builder()
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build()
-                        .apply {
-                            setAnalyzer(
-                                cameraExecutor,
-                                LiveImageAnalyzer(
-                                    textRecognizer,
-                                    onTextRecognized,
-                                    regex,
-                                    barcodeScanner = barcodeScanner,
-                                    onNumberFromBarcodeFound = onBarcodeRecognized
-                                )
+    AndroidView(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        factory = { ctx ->
+            val previewView = PreviewView(ctx)
+            cameraProviderFuture.addListener({
+                val imageAnalysis = ImageAnalysis.Builder()
+                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                    .build()
+                    .apply {
+                        setAnalyzer(
+                            cameraExecutor,
+                            LiveImageAnalyzer(
+                                textRecognizer = textRecognizer,
+                                onRegexFound = onTextRecognized,
+                                regexString = regex,
+                                barcodeScanner = barcodeScanner,
+                                onNumberFromBarcodeFound = onBarcodeRecognized
                             )
-                        }
-                    val cameraSelector = CameraSelector.Builder()
-                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                        .build()
-                    cameraProvider.unbindAll()
-                    cameraProvider.bindToLifecycle(
-                        lifecycleOwner,
-                        cameraSelector,
-                        imageAnalysis,
-                        preview,
-                        imageCapture
-                    )
-                }, executor)
-                preview = Preview.Builder().build().also {
-                    it.setSurfaceProvider(previewView.surfaceProvider)
-                }
-                previewView
+                        )
+                    }
+                val cameraSelector = CameraSelector.Builder()
+                    .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                    .build()
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    lifecycleOwner,
+                    cameraSelector,
+                    imageAnalysis,
+                    preview,
+                    imageCapture
+                )
+            }, executor)
+            preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(previewView.surfaceProvider)
             }
-        )
+            previewView
+        }
+    )
 }
 
 private fun makeFile(
