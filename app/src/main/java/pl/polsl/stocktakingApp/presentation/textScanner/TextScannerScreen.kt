@@ -76,7 +76,6 @@ fun TextScannerScreen(
                 regex = regex?.let {
                     URLDecoder.decode(regex, StandardCharsets.UTF_8.toString())
                 },
-                onBackPressed = { navigator.popBackStack() },
                 barcodeScanner = barcodeScanner,
                 onBarcodeRecognized = viewModel::onBarcodeRecognized
             )

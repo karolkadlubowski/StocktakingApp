@@ -24,7 +24,6 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.text.TextRecognizer
 import pl.polsl.stocktakingApp.R
-import pl.polsl.stocktakingApp.domain.services.ImageAnalyzer
 import pl.polsl.stocktakingApp.ui.theme.C
 import java.io.File
 import java.util.concurrent.Executors
@@ -36,7 +35,6 @@ fun MLKitTextRecognition(
     textRecognizer: TextRecognizer,
     onTextRecognized: (String) -> Unit,
     regex: String?,
-    onBackPressed: () -> Unit,
     barcodeScanner: BarcodeScanner,
     onBarcodeRecognized: (String) -> Unit
 ) {
@@ -115,7 +113,7 @@ fun TextRecognitionView(
                         .apply {
                             setAnalyzer(
                                 cameraExecutor,
-                                ImageAnalyzer(
+                                LiveImageAnalyzer(
                                     textRecognizer,
                                     onTextRecognized,
                                     regex,
