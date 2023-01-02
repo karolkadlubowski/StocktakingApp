@@ -8,8 +8,8 @@ import pl.polsl.stocktakingApp.domain.services.LabelLineDividerService
 import pl.polsl.stocktakingApp.presentation.configuration.CodeType
 
 class PrintLabel(
-    private val bluetoothService: BluetoothService,
-    private val labelLineDividerService: LabelLineDividerService
+    private val _bluetoothService: BluetoothService,
+    private val _labelLineDividerService: LabelLineDividerService
 ) : UseCase<PrintLabel.Params, Result> {
     data class Params(
         val deviceAddress: String,
@@ -43,7 +43,7 @@ class PrintLabel(
                 append("^XZ")
             }
         } else {
-            val dividedName = labelLineDividerService.divideString(name)
+            val dividedName = _labelLineDividerService.divideString(name)
             val nameFirstPart = dividedName[0]
             val nameSecondPart = dividedName[1]
 
@@ -67,6 +67,6 @@ class PrintLabel(
                 append("^XZ\n")
             }
         }
-        return bluetoothService.print(input.deviceAddress, label)
+        return _bluetoothService.print(input.deviceAddress, label)
     }
 }

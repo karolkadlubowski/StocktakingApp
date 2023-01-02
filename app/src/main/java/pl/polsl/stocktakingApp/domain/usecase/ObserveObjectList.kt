@@ -6,9 +6,9 @@ import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.data.repository.StocktakingRepository
 import pl.polsl.stocktakingApp.domain.UseCase
 
-class ObserveObjectList(private val repository: StocktakingRepository) :
+class ObserveObjectList(private val _repository: StocktakingRepository) :
     UseCase<Flow<String>, DataFlow<List<StocktakingObject>>> {
     override fun invoke(input: Flow<String>): DataFlow<List<StocktakingObject>> {
-        return repository.observeObjectList(input)
+        return _repository.observeObjectList(input)
     }
 }

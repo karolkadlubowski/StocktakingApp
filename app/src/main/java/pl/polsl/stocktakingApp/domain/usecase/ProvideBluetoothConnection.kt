@@ -5,8 +5,8 @@ import pl.polsl.stocktakingApp.domain.SuspendUseCase
 import pl.polsl.stocktakingApp.domain.services.BluetoothService
 
 class ProvideBluetoothConnection(
-    private val bluetoothService: BluetoothService
+    private val _bluetoothService: BluetoothService
 ) : SuspendUseCase<Unit, Result> {
     override suspend fun invoke(input: Unit): Result =
-        bluetoothService.provideBluetoothConnection()
+        _bluetoothService.provideBluetoothConnection()
 }
