@@ -16,14 +16,14 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import pl.polsl.printer.BluetoothService
-import pl.polsl.printer.LabelLineDividerService
 import pl.polsl.stocktakingApp.data.Database
 import pl.polsl.stocktakingApp.data.dao.StocktakingDao
 import pl.polsl.stocktakingApp.data.repository.StocktakingRepository
 import pl.polsl.stocktakingApp.data.settings.SETTINGS_NAME
 import pl.polsl.stocktakingApp.data.settings.Settings
 import pl.polsl.stocktakingApp.data.settings.SettingsImpl
+import pl.polsl.stocktakingApp.domain.services.BluetoothService
+import pl.polsl.stocktakingApp.domain.services.LabelLineDividerService
 import pl.polsl.stocktakingApp.domain.services.RegexService
 import pl.polsl.stocktakingApp.domain.usecase.*
 import javax.inject.Singleton

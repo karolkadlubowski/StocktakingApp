@@ -3,9 +3,9 @@ package pl.polsl.stocktakingApp.presentation.list
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
-import pl.polsl.printer.Result
 import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.common.DataFlow
+import pl.polsl.stocktakingApp.common.Result
 import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.domain.usecase.*
 import pl.polsl.stocktakingApp.presentation.common.BaseViewModel

@@ -1,10 +1,10 @@
 package pl.polsl.stocktakingApp.domain.usecase
 
-import pl.polsl.printer.BluetoothService
-import pl.polsl.printer.DataResult
-import pl.polsl.printer.mapData
+import pl.polsl.stocktakingApp.common.DataResult
+import pl.polsl.stocktakingApp.common.mapData
 import pl.polsl.stocktakingApp.data.models.BluetoothDevice
 import pl.polsl.stocktakingApp.domain.UseCase
+import pl.polsl.stocktakingApp.domain.services.BluetoothService
 
 interface GetBondedDevices : UseCase<Unit, DataResult<List<BluetoothDevice>>>
 

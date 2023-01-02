@@ -1,4 +1,4 @@
-package pl.polsl.printer
+package pl.polsl.stocktakingApp.common
 
 /**
  * If there is some case that we would like to return subclass of Result of DataResult from the same method,

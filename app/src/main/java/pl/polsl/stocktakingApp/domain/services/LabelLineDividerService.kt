@@ -1,4 +1,4 @@
-package pl.polsl.printer
+package pl.polsl.stocktakingApp.domain.services
 
 class LabelLineDividerService {
     companion object {

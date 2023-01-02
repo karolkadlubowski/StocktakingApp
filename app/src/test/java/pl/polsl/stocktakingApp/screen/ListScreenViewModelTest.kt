@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.flowOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import pl.polsl.stocktakingApp.base.BaseTest
+import pl.polsl.stocktakingApp.common.Result
 import pl.polsl.stocktakingApp.common.StreamData
 import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.domain.usecase.*
@@ -80,7 +81,7 @@ class ListScreenViewModelTest : BaseTest<ListScreenViewModel>() {
         every { observeObjectList.invoke(any()) } returns flowOf(StreamData.Ready(listOf()))
         every { observeRegex.invoke(Unit) } returns flowOf("")
         coEvery { getSelectedPrinter(Unit) } returns null
-        coEvery { provideBluetoothConnection(Unit) } returns pl.polsl.printer.Result.Successful
+        coEvery { provideBluetoothConnection(Unit) } returns Result.Successful
 
         initService()
 
@@ -108,8 +109,8 @@ class ListScreenViewModelTest : BaseTest<ListScreenViewModel>() {
         every { observeRegex.invoke(Unit) } returns flowOf("")
         coEvery { getSelectedPrinter(Unit) } returns printerAddress
         coEvery { getLabelCodeType(Unit) } returns labelType
-        coEvery { provideBluetoothConnection(Unit) } returns pl.polsl.printer.Result.Successful
-        every { printLabel(any()) } returns pl.polsl.printer.Result.Successful
+        coEvery { provideBluetoothConnection(Unit) } returns Result.Successful
+        every { printLabel(any()) } returns Result.Successful
 
         initService()
 
@@ -133,8 +134,8 @@ class ListScreenViewModelTest : BaseTest<ListScreenViewModel>() {
             every { observeRegex.invoke(Unit) } returns flowOf("")
             coEvery { getSelectedPrinter(Unit) } returns printerAddress
             coEvery { getLabelCodeType(Unit) } returns labelType
-            coEvery { provideBluetoothConnection(Unit) } returns pl.polsl.printer.Result.Successful
-            every { printLabel(any()) } returns pl.polsl.printer.Result.Error.BluetoothConnection
+            coEvery { provideBluetoothConnection(Unit) } returns Result.Successful
+            every { printLabel(any()) } returns Result.Error.BluetoothConnection
 
             initService()
             service.events.test {
@@ -160,7 +161,7 @@ class ListScreenViewModelTest : BaseTest<ListScreenViewModel>() {
 
             every { observeObjectList.invoke(any()) } returns flowOf(StreamData.Ready(listOf()))
             every { observeRegex.invoke(Unit) } returns flowOf("")
-            coEvery { provideBluetoothConnection(Unit) } returns pl.polsl.printer.Result.Error.BluetoothEnabling
+            coEvery { provideBluetoothConnection(Unit) } returns Result.Error.BluetoothEnabling
 
             initService()
             service.events.test {
