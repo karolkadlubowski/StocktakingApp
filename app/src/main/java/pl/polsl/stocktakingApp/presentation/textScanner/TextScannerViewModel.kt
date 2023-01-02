@@ -51,7 +51,7 @@ class TextScannerScreenViewModel @Inject constructor(
         _recognizer.process(inputImage)
             .addOnSuccessListener { visionText ->
                 val foundString =
-                    _regexService.returnRegexStringFromString(regexString, visionText.text)
+                    _regexService.getStocktakingNumberFromText(regexString, visionText.text)
                 _state.value = TextScannerScreenState.Found(foundString)
             }
             .addOnFailureListener { e ->

@@ -39,7 +39,7 @@ class LiveImageAnalyzer(
                 _textRecognizer.process(image)
                     .addOnCompleteListener { result ->
                         if (result.isSuccessful) {
-                            val foundString = _regexService.returnRegexStringOrNullFromString(
+                            val foundString = _regexService.getStocktakingNumberOrNullFromText(
                                 _regexString,
                                 result.result.text
                             )

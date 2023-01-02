@@ -1,31 +1,29 @@
 package pl.polsl.stocktakingApp.domain.services
 
 class RegexService {
-    private val letterRegex = "[a-zA-Z]"
-    private val digitRegex = "\\d"
 
-    fun returnRegexStringFromString(regexString: String?, foundString: String): String {
+    fun getStocktakingNumberFromText(regexString: String?, text: String): String {
         return if (regexString != null) {
-            val regex = rewriteStringToRegex(regexString)
-            var foundPattern = regex.find(foundString.uppercase())?.value
+            val regex = _rewriteStringToRegex(regexString)
+            var foundPattern = regex.find(text.uppercase())?.value
 
             if (foundPattern == null) {
-                foundPattern = switchSigns(foundString, regex)
+                foundPattern = _switchSigns(text, regex)
             }
 
-            foundPattern ?: foundString
+            foundPattern ?: text
         } else {
-            foundString
+            text
         }
     }
 
-    fun returnRegexStringOrNullFromString(regexString: String?, foundString: String): String? {
+    fun getStocktakingNumberOrNullFromText(regexString: String?, foundText: String): String? {
         return if (regexString != null) {
-            val regex = rewriteStringToRegex(regexString)
-            var foundPattern = regex.find(foundString.uppercase())?.value
+            val regex = _rewriteStringToRegex(regexString)
+            var foundPattern = regex.find(foundText.uppercase())?.value
 
             if (foundPattern == null) {
-                foundPattern = switchSigns(foundString, regex)
+                foundPattern = _switchSigns(foundText, regex)
             }
 
             foundPattern
@@ -34,16 +32,16 @@ class RegexService {
         }
     }
 
-    private fun rewriteStringToRegex(text: String): Regex {
+    private fun _rewriteStringToRegex(text: String): Regex {
         val string = text.filterNot { it.isWhitespace() }
 
         val regexStringBuilder = StringBuilder()
 
         string.forEach {
             if (it.isLetter()) {
-                regexStringBuilder.append(letterRegex)
+                regexStringBuilder.append(LETTER_REGEX)
             } else if (it.isDigit()) {
-                regexStringBuilder.append(digitRegex)
+                regexStringBuilder.append(DIGIT_REGEX)
             } else {
                 regexStringBuilder.append(it)
             }
@@ -52,9 +50,14 @@ class RegexService {
         return regexStringBuilder.toString().toRegex()
     }
 
-    private fun switchSigns(scannedString: String, regex: Regex): String? {
-        val dReplacedForZero = scannedString.replace('D', '0')
+    private fun _switchSigns(text: String, regex: Regex): String? {
+        val dReplacedForZero = text.replace('D', '0')
         val oReplacedForZero = dReplacedForZero.replace('O', '0')
         return regex.find(oReplacedForZero)?.value
+    }
+
+    companion object {
+        private const val LETTER_REGEX = "[a-zA-Z]"
+        private const val DIGIT_REGEX = "\\d"
     }
 }
