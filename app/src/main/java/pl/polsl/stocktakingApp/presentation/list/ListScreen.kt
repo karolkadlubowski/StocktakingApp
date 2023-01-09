@@ -128,7 +128,6 @@ fun ListScreen(
                                 Modifier
                                     .aspectRatio(1f)
                                     .clip(CircleShape)
-                                    //.background(C.SettingsOrange)
                                     .background(
                                         brush = C.GradientOrange
                                     )
