@@ -22,17 +22,17 @@ import timber.log.Timber
 import java.io.IOException
 
 class BluetoothService(
-    private val context: Context
+    private val _context: Context
 ) {
     private val _bluetoothAdapter: BluetoothAdapter =
-        (context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
+        (_context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
 
     private val isVersionAboveAndroidR: Boolean
         get() = Build.VERSION.SDK_INT > Build.VERSION_CODES.R
 
     private val isPermissionGranted: Boolean
         get() = ActivityCompat.checkSelfPermission(
-            context,
+            _context,
             Manifest.permission.BLUETOOTH_CONNECT
         ) == PackageManager.PERMISSION_GRANTED
 
@@ -78,7 +78,7 @@ class BluetoothService(
                 printerConnection.open()
                 val printer =
                     ZebraPrinterFactory.getInstance(PrinterLanguage.ZPL, printerConnection)
-                sendToPrint(printer!!, content)
+                _sendToPrint(printer!!, content)
             } catch (e: ConnectionException) {
                 Timber.e(e.message)
                 return Result.Error.BluetoothConnection
@@ -91,12 +91,12 @@ class BluetoothService(
         }
     }
 
-    private fun sendToPrint(printer: ZebraPrinter, content: String): Result {
+    private fun _sendToPrint(printer: ZebraPrinter, content: String): Result {
         try {
             val fileName = "TEMP.ZPL"
-            context.deleteFile(fileName)
-            val filepath = context.getFileStreamPath(fileName)
-            createFile(fileName, content)
+            _context.deleteFile(fileName)
+            val filepath = _context.getFileStreamPath(fileName)
+            _createFile(fileName, content)
             printer.sendFileContents(filepath.absolutePath)
         } catch (e1: ConnectionException) {
             Timber.e(e1.message)
@@ -109,8 +109,8 @@ class BluetoothService(
     }
 
     @Throws(IOException::class)
-    private fun createFile(fileName: String, content: String) {
-        val os = context.openFileOutput(fileName, Context.MODE_APPEND)
+    private fun _createFile(fileName: String, content: String) {
+        val os = _context.openFileOutput(fileName, Context.MODE_APPEND)
         os.write(content.toByteArray())
         os.flush()
         os.close()

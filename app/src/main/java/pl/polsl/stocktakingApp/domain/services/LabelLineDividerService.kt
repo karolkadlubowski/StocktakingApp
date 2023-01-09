@@ -21,10 +21,10 @@ class LabelLineDividerService {
         }
 
         if (wordList.size == 1 || wordList[0].length > MAX_LINE_LENGTH) {
-            return divideStringEqually(string)
+            return _divideStringEqually(string)
         }
 
-        var result: Array<String> = divideStringToTwoSubstrings(wordList, dividePoint)
+        var result: Array<String> = _divideStringToTwoSubstrings(wordList, dividePoint)
 
         if (result[0].length > MAX_LINE_LENGTH) {
             result = shortenFirstLine(result, wordList, dividePoint)
@@ -33,7 +33,7 @@ class LabelLineDividerService {
         }
 
         if (result[0].length > MAX_LINE_LENGTH) {
-            return divideStringEqually(string)
+            return _divideStringEqually(string)
         }
 
         if (result[1].length > MAX_LINE_LENGTH) {
@@ -43,12 +43,12 @@ class LabelLineDividerService {
         return result
     }
 
-    private fun divideStringEqually(string: String): Array<String> = arrayOf(
+    private fun _divideStringEqually(string: String): Array<String> = arrayOf(
         string.substring(startIndex = 0, endIndex = MAX_LINE_LENGTH),
         string.substring(startIndex = MAX_LINE_LENGTH)
     )
 
-    private fun divideStringToTwoSubstrings(
+    private fun _divideStringToTwoSubstrings(
         wordList: Array<String>,
         dividePoint: Int
     ): Array<String> {
@@ -81,7 +81,7 @@ class LabelLineDividerService {
         var result: Array<String>
         do {
             dividePoint--
-            result = divideStringToTwoSubstrings(wordList, dividePoint)
+            result = _divideStringToTwoSubstrings(wordList, dividePoint)
         } while ((firstDivisionResult[0].dropLast(wordList[dividePoint - 1].length + 1)).length > MAX_LINE_LENGTH)
         return result
     }
@@ -95,7 +95,7 @@ class LabelLineDividerService {
         var result = firstDivisionResult
         while ((firstDivisionResult[0] + " " + wordList[dividePoint]).length <= MAX_LINE_LENGTH) {
             dividePoint++
-            result = divideStringToTwoSubstrings(wordList, dividePoint)
+            result = _divideStringToTwoSubstrings(wordList, dividePoint)
         }
         return result
     }
