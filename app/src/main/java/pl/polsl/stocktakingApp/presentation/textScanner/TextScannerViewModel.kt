@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.core.net.toFile
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -32,7 +33,8 @@ class TextScannerScreenViewModel @Inject constructor(
 
     private var _regex: Flow<String?> = _observeRegex(Unit)
 
-    private val _recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+    private val _recognizer: TextRecognizer =
+        TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
     fun onPhotoTaken(photoUri: Uri) {
         _state.value = TextScannerScreenState.Cropping(photoUri)
@@ -48,23 +50,9 @@ class TextScannerScreenViewModel @Inject constructor(
 
         _recognizer.process(inputImage)
             .addOnSuccessListener { visionText ->
-                val foundString = visionText.text
-                if (regexString != null) {
-                    val regex = _regexService.rewriteStringToRegex(regexString)
-                    var foundPattern = regex.find(foundString)?.value
-
-                    if (foundPattern == null) {
-                        foundPattern = _regexService.switchSigns(foundString, regex)
-                    }
-
-                    if (foundPattern != null) {
-                        _state.value = TextScannerScreenState.Found(foundPattern)
-                    } else {
-                        _state.value = TextScannerScreenState.Found(foundString)
-                    }
-                } else {
-                    _state.value = TextScannerScreenState.Found(foundString)
-                }
+                val foundString =
+                    _regexService.getStocktakingNumberFromText(regexString, visionText.text)
+                _state.value = TextScannerScreenState.Found(foundString)
             }
             .addOnFailureListener { e ->
                 _state.value = TextScannerScreenState.Scanning

@@ -1,6 +1,7 @@
 package pl.polsl.stocktakingApp.presentation.common.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,7 +42,11 @@ fun ObjectItem(
                 onClicked()
             }
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(5.dp)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                .background(C.BackgroundLighter)
+                .padding(5.dp)
+        ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = stocktakingObject.name,
@@ -61,16 +66,9 @@ fun ObjectItem(
                 tint = Color.Unspecified,
                 modifier = Modifier
                     .padding(start = D.Icon.padding)
-//                    .then(
-//                        Modifier
-//                            .aspectRatio(1f)
-//                            .clip(CircleShape)
-//                        //.background(C.Golden)
-//                    )
                     .clickable {
                         onPrintButtonClicked()
                     }
-                //.weight(0.15f)
             )
         }
     }

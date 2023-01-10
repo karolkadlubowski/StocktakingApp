@@ -69,7 +69,7 @@ fun InputField(
                 value = value,
                 onValueChange = onValueChange,
                 modifier = Modifier
-                    .background(Color.Transparent)
+                    .background(C.BackgroundLighter)
                     .border(
                         BorderStroke(
                             2.dp,
@@ -81,8 +81,6 @@ fun InputField(
                     .padding(10.dp),
                 maxLines = maxLines,
                 singleLine = singleLine,
-                //placeholder = hint,
-                // leadingIcon = leadingIcon,
                 textStyle = MaterialTheme.typography.inputField,
                 visualTransformation = if (keyboardOptions.keyboardType == KeyboardType.Password) PasswordVisualTransformation() else VisualTransformation.None,
                 keyboardOptions = keyboardOptions,
@@ -90,14 +88,5 @@ fun InputField(
                 enabled = isEnabled
             )
         }
-//        AnimatedVisibility(
-//            visible = error != null,
-//            modifier = Modifier.padding(vertical = D.Padding.inputFieldErrorLabel)
-//        ) {
-//            Text(
-//                text = error ?: "",
-//                style = inputFieldTheme.errorLabelStyle
-//            )
-//        }
     }
 }

@@ -4,10 +4,9 @@ import pl.polsl.stocktakingApp.data.models.StocktakingObject
 import pl.polsl.stocktakingApp.data.repository.StocktakingRepository
 import pl.polsl.stocktakingApp.domain.SuspendUseCase
 
-interface UpsertObject : SuspendUseCase<StocktakingObject, Unit>
-
-class UpsertObjectImpl(private val repository: StocktakingRepository) : UpsertObject {
+class UpsertObject(private val _repository: StocktakingRepository) :
+    SuspendUseCase<StocktakingObject, Unit> {
     override suspend fun invoke(input: StocktakingObject) {
-        return repository.upsertObject(input)
+        return _repository.upsertObject(input)
     }
 }

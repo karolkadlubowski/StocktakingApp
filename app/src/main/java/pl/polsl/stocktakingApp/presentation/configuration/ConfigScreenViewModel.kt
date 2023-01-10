@@ -19,7 +19,7 @@ import javax.inject.Inject
 class ConfigScreenViewModel @Inject constructor(
     private val _saveSelectedPrinter: SaveSelectedPrinter,
     private val _provideBluetoothConnection: ProvideBluetoothConnection,
-    private val _getBondedDevices: GetBondedDevices,
+    private val _getBoundDevices: GetBoundDevices,
     private val _setLabelCodeType: SetLabelCodeType,
     private val _setExampleNumber: SetExampleNumber,
     _observeExampleNumber: ObserveExampleNumber,
@@ -59,7 +59,7 @@ class ConfigScreenViewModel @Inject constructor(
     }
 
     fun changeSelectedDevice(device: BluetoothDevice) =
-        launch { _saveSelectedPrinter(SaveSelectedPrinter.Params(device.address)) }
+        launch { _saveSelectedPrinter(device.address) }
 
     fun changeExampleNumber(number: String) = launch {
         _setExampleNumber(number)
@@ -71,7 +71,7 @@ class ConfigScreenViewModel @Inject constructor(
             return
         }
 
-        val result = _getBondedDevices(Unit)
+        val result = _getBoundDevices(Unit)
         if (result !is DataResult.Successful) {
             _events.emit(Event.Message(R.string.getBondedDevicesError))
             return

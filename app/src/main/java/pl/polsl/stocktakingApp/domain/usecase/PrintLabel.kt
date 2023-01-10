@@ -7,19 +7,17 @@ import pl.polsl.stocktakingApp.domain.services.BluetoothService
 import pl.polsl.stocktakingApp.domain.services.LabelLineDividerService
 import pl.polsl.stocktakingApp.presentation.configuration.CodeType
 
-interface PrintLabel : UseCase<PrintLabel.Params, Result> {
+class PrintLabel(
+    private val _bluetoothService: BluetoothService,
+    private val _labelLineDividerService: LabelLineDividerService
+) : UseCase<PrintLabel.Params, Result> {
     data class Params(
         val deviceAddress: String,
         val stocktakingObject: StocktakingObject,
         val codeType: CodeType
     )
-}
 
-internal class PrintLabelImpl(
-    private val bluetoothService: BluetoothService,
-    private val labelLineDividerService: LabelLineDividerService
-) : PrintLabel {
-    override fun invoke(input: PrintLabel.Params): Result {
+    override fun invoke(input: Params): Result {
         val data = input.stocktakingObject
         val name = data.name.trim()
         val code = data.barcode
@@ -45,7 +43,7 @@ internal class PrintLabelImpl(
                 append("^XZ")
             }
         } else {
-            val dividedName = labelLineDividerService.divideString(name)
+            val dividedName = _labelLineDividerService.divideString(name)
             val nameFirstPart = dividedName[0]
             val nameSecondPart = dividedName[1]
 
@@ -69,6 +67,6 @@ internal class PrintLabelImpl(
                 append("^XZ\n")
             }
         }
-        return bluetoothService.print(input.deviceAddress, label)
+        return _bluetoothService.print(input.deviceAddress, label)
     }
 }

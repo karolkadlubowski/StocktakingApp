@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pl.polsl.stocktakingApp.presentation.common.observeState
 import pl.polsl.stocktakingApp.presentation.common.ui.FilterSwitcher
 import pl.polsl.stocktakingApp.presentation.common.ui.InputField
@@ -26,7 +25,6 @@ import pl.polsl.stocktakingApp.ui.theme.pageTitle
 @Destination
 @Composable
 fun ConfigScreen(
-    navigator: DestinationsNavigator,
     viewModel: ConfigScreenViewModel = hiltViewModel()
 ) {
     val state by viewModel.observeState()
@@ -59,7 +57,6 @@ fun ConfigScreen(
             InputField(
                 value = state.exampleNumber ?: "",
                 onValueChange = {
-                    //regex.value = it
                     viewModel.changeExampleNumber(it)
                 },
                 description = "Przykładowy numer"
@@ -75,7 +72,6 @@ fun ConfigScreen(
             )
 
             FilterSwitcher(
-                //modifier = Modifier.padding(horizontal = D.Padding.rippleSmall),
                 selectedTabIndex = state.codeType.ordinal,
                 tabs = CodeType.values()
                     .map { stringResource(id = it.stringId) },
@@ -106,56 +102,3 @@ fun ConfigScreen(
         }
     }
 }
-
-//@Composable
-//fun ImageSelectorAndCropper(
-//    state: ConfigScreenState,
-//    changeUri: (uri: Uri?) -> Unit
-//) {
-////    var imageUri: Uri? = remember {
-////        null
-////    }
-//    val context = LocalContext.current
-//    val bitmap = remember {
-//        mutableStateOf<Bitmap?>(null)
-//    }
-//
-//    val imageCropLauncher = rememberLauncherForActivityResult(CropImageContract()) { result ->
-//        if (result.isSuccessful) {
-//            // use the cropped image
-//            //imageUri = result.uriContent
-//            changeUri(result.uriContent)
-//        } else {
-//            // an error occurred cropping
-//            val exception = result.error
-//        }
-//    }
-//
-//    val imagePickerLauncher =
-//        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-//            val cropOptions = CropImageContractOptions(uri, CropImageOptions())
-//            imageCropLauncher.launch(cropOptions)
-//        }
-//
-//    if (state.uri != null) {
-//        Image(
-//            painter = rememberImagePainter(
-//                data = state.uri
-//            ),
-//            contentDescription = null,
-//            modifier = Modifier.wrapContentSize(),
-//            contentScale = ContentScale.FillBounds
-//        )
-//
-//        if (Build.VERSION.SDK_INT < 28) {
-//            bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, state.uri)
-//        } else {
-//            val source = ImageDecoder.createSource(context.contentResolver, state.uri!!)
-//            bitmap.value = ImageDecoder.decodeBitmap(source)
-//        }
-//    } else {
-//        Button(onClick = { imagePickerLauncher.launch("image/*") }) {
-//            Text("Pick image to crop")
-//        }
-//    }
-//}

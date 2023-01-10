@@ -72,8 +72,8 @@ fun ModifyObjectScreen(
         viewModel.init(stocktakingObject)
     })
 
-    val screenMode: ObjectModificationMode = remember {
-        if (stocktakingObject != null) ObjectModificationMode.EditMode else ObjectModificationMode.AddMode
+    val screenMode: ModificationMode = remember {
+        if (stocktakingObject != null) ModificationMode.EditMode else ModificationMode.AddMode
     }
 
     SnackbarScreenWrapper(snackbarHostState = snackbarHostState) {
@@ -93,7 +93,7 @@ fun ModifyObjectScreen(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    stringResource(id = screenMode.pageTitle),
+                    stringResource(id = screenMode.pageTitleId),
                     style = MaterialTheme.typography.pageTitle,
                     modifier = Modifier
                         .padding(vertical = 10.dp)

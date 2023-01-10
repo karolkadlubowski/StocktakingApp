@@ -24,7 +24,6 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.text.TextRecognizer
 import pl.polsl.stocktakingApp.R
-import pl.polsl.stocktakingApp.domain.services.ImageAnalyzer
 import pl.polsl.stocktakingApp.ui.theme.C
 import java.io.File
 import java.util.concurrent.Executors
@@ -36,7 +35,6 @@ fun MLKitTextRecognition(
     textRecognizer: TextRecognizer,
     onTextRecognized: (String) -> Unit,
     regex: String?,
-    onBackPressed: () -> Unit,
     barcodeScanner: BarcodeScanner,
     onBarcodeRecognized: (String) -> Unit
 ) {
@@ -102,46 +100,46 @@ fun TextRecognitionView(
     val cameraProvider = cameraProviderFuture.get()
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
 
-        AndroidView(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            factory = { ctx ->
-                val previewView = PreviewView(ctx)
-                cameraProviderFuture.addListener({
-                    val imageAnalysis = ImageAnalysis.Builder()
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build()
-                        .apply {
-                            setAnalyzer(
-                                cameraExecutor,
-                                ImageAnalyzer(
-                                    textRecognizer,
-                                    onTextRecognized,
-                                    regex,
-                                    barcodeScanner = barcodeScanner,
-                                    onNumberFromBarcodeFound = onBarcodeRecognized
-                                )
+    AndroidView(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        factory = { ctx ->
+            val previewView = PreviewView(ctx)
+            cameraProviderFuture.addListener({
+                val imageAnalysis = ImageAnalysis.Builder()
+                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                    .build()
+                    .apply {
+                        setAnalyzer(
+                            cameraExecutor,
+                            LiveImageAnalyzer(
+                                _textRecognizer = textRecognizer,
+                                _onRegexFound = onTextRecognized,
+                                _regexString = regex,
+                                _barcodeScanner = barcodeScanner,
+                                _onNumberFromBarcodeFound = onBarcodeRecognized
                             )
-                        }
-                    val cameraSelector = CameraSelector.Builder()
-                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                        .build()
-                    cameraProvider.unbindAll()
-                    cameraProvider.bindToLifecycle(
-                        lifecycleOwner,
-                        cameraSelector,
-                        imageAnalysis,
-                        preview,
-                        imageCapture
-                    )
-                }, executor)
-                preview = Preview.Builder().build().also {
-                    it.setSurfaceProvider(previewView.surfaceProvider)
-                }
-                previewView
+                        )
+                    }
+                val cameraSelector = CameraSelector.Builder()
+                    .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                    .build()
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    lifecycleOwner,
+                    cameraSelector,
+                    imageAnalysis,
+                    preview,
+                    imageCapture
+                )
+            }, executor)
+            preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(previewView.surfaceProvider)
             }
-        )
+            previewView
+        }
+    )
 }
 
 private fun makeFile(

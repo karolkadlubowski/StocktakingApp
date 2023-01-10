@@ -22,38 +22,43 @@ import timber.log.Timber
 import java.io.IOException
 
 class BluetoothService(
-    private val context: Context
+    private val _context: Context
 ) {
-    private val _bluetoothAdapter: BluetoothAdapter =
-        (context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
+    private val _bluetoothAdapter: BluetoothAdapter by lazy {
+        (_context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
+    }
 
     private val isVersionAboveAndroidR: Boolean
         get() = Build.VERSION.SDK_INT > Build.VERSION_CODES.R
 
     private val isPermissionGranted: Boolean
         get() = ActivityCompat.checkSelfPermission(
-            context,
+            _context,
             Manifest.permission.BLUETOOTH_CONNECT
         ) == PackageManager.PERMISSION_GRANTED
 
     @SuppressLint("MissingPermission")
     suspend fun provideBluetoothConnection(): Result {
-        if (_bluetoothAdapter.isEnabled) {
-            return Result.Successful
-        } else {
-            if (isVersionAboveAndroidR && !isPermissionGranted
-            ) {
-                return Result.Error.PermissionNotGranted
+        try {
+            if (_bluetoothAdapter.isEnabled) {
+                return Result.Successful
             } else {
-                _bluetoothAdapter.enable()
-                for (i in 0 until 6) {
-                    delay(300)
-                    if (_bluetoothAdapter.isEnabled) {
-                        return Result.Successful
+                if (isVersionAboveAndroidR && !isPermissionGranted
+                ) {
+                    return Result.Error.PermissionNotGranted
+                } else {
+                    _bluetoothAdapter.enable()
+                    for (i in 0 until 6) {
+                        delay(300)
+                        if (_bluetoothAdapter.isEnabled) {
+                            return Result.Successful
+                        }
                     }
+                    return Result.Error.BluetoothEnabling
                 }
-                return Result.Error.BluetoothEnabling
             }
+        } catch (e: Exception) {
+            return Result.Error.BluetoothEnabling
         }
     }
 
@@ -78,7 +83,7 @@ class BluetoothService(
                 printerConnection.open()
                 val printer =
                     ZebraPrinterFactory.getInstance(PrinterLanguage.ZPL, printerConnection)
-                sendToPrint(printer!!, content)
+                _sendToPrint(printer!!, content)
             } catch (e: ConnectionException) {
                 Timber.e(e.message)
                 return Result.Error.BluetoothConnection
@@ -91,12 +96,12 @@ class BluetoothService(
         }
     }
 
-    private fun sendToPrint(printer: ZebraPrinter, content: String): Result {
+    private fun _sendToPrint(printer: ZebraPrinter, content: String): Result {
         try {
             val fileName = "TEMP.ZPL"
-            context.deleteFile(fileName)
-            val filepath = context.getFileStreamPath(fileName)
-            createFile(fileName, content)
+            _context.deleteFile(fileName)
+            val filepath = _context.getFileStreamPath(fileName)
+            _createFile(fileName, content)
             printer.sendFileContents(filepath.absolutePath)
         } catch (e1: ConnectionException) {
             Timber.e(e1.message)
@@ -109,8 +114,8 @@ class BluetoothService(
     }
 
     @Throws(IOException::class)
-    private fun createFile(fileName: String, content: String) {
-        val os = context.openFileOutput(fileName, Context.MODE_APPEND)
+    private fun _createFile(fileName: String, content: String) {
+        val os = _context.openFileOutput(fileName, Context.MODE_APPEND)
         os.write(content.toByteArray())
         os.flush()
         os.close()

@@ -56,12 +56,12 @@ object MainModule {
     @Provides
     @Singleton
     fun providesObserveObjectListUseCase(stocktakingRepository: StocktakingRepository): ObserveObjectList =
-        ObserveObjectListImpl(stocktakingRepository)
+        ObserveObjectList(stocktakingRepository)
 
     @Provides
     @Singleton
     fun providesUpsertObjectUseCase(stocktakingRepository: StocktakingRepository): UpsertObject =
-        UpsertObjectImpl(stocktakingRepository)
+        UpsertObject(stocktakingRepository)
 
     @Provides
     @Singleton
@@ -70,13 +70,13 @@ object MainModule {
 
     @Provides
     @Singleton
-    fun providesGetBondedDevicesUseCase(bluetoothService: BluetoothService): GetBondedDevices =
-        GetBondedDevicesImpl(bluetoothService)
+    fun providesGetBondedDevicesUseCase(bluetoothService: BluetoothService): GetBoundDevices =
+        GetBoundDevices(bluetoothService)
 
     @Provides
     @Singleton
     fun providesBluetoothConnectionUseCase(bluetoothService: BluetoothService): ProvideBluetoothConnection =
-        ProvideBluetoothConnectionImpl(bluetoothService)
+        ProvideBluetoothConnection(bluetoothService)
 
     @Singleton
     @Provides
@@ -99,33 +99,33 @@ object MainModule {
     @Provides
     @Singleton
     fun providesSetLabelCodeType(settings: Settings): SetLabelCodeType =
-        SetLabelCodeTypeImpl(settings)
+        SetLabelCodeType(settings)
 
     @Provides
     @Singleton
     fun providesGetLabelCodeType(settings: Settings): GetLabelCodeType =
-        GetLabelCodeTypeImpl(settings)
+        GetLabelCodeType(settings)
 
     @Provides
     @Singleton
     fun providesObserveLabelCodeType(settings: Settings): ObserveLabelCodeType =
-        ObserveLabelCodeTypeImpl(settings)
+        ObserveLabelCodeType(settings)
 
 
     @Provides
     @Singleton
     fun providesGetSelectedPrinter(settings: Settings): GetSelectedPrinter =
-        GetSelectedPrinterImpl(settings)
+        GetSelectedPrinter(settings)
 
     @Provides
     @Singleton
     fun providesSaveSelectedPrinter(settings: Settings): SaveSelectedPrinter =
-        SaveSelectedPrinterImpl(settings)
+        SaveSelectedPrinter(settings)
 
     @Provides
     @Singleton
     fun providesObserveSelectedPrinter(settings: Settings): ObserveSelectedPrinter =
-        ObserveSelectedPrinterImpl(settings)
+        ObserveSelectedPrinter(settings)
 
     @Provides
     @Singleton
@@ -136,22 +136,22 @@ object MainModule {
     fun providesPrintLabel(
         bluetoothService: BluetoothService,
         labelLineDividerService: LabelLineDividerService
-    ): PrintLabel = PrintLabelImpl(bluetoothService, labelLineDividerService)
+    ): PrintLabel = PrintLabel(bluetoothService, labelLineDividerService)
 
     @Provides
     @Singleton
     fun providesDeleteObject(stocktakingRepository: StocktakingRepository): DeleteObject =
-        DeleteObjectImpl(stocktakingRepository)
+        DeleteObject(stocktakingRepository)
 
     @Provides
     @Singleton
     fun providesSetExampleNumber(settings: Settings): SetExampleNumber =
-        SetExampleNumberImpl(settings)
+        SetExampleNumber(settings)
 
     @Provides
     @Singleton
     fun providesObserveExampleNumber(settings: Settings): ObserveExampleNumber =
-        ObserveExampleNumberImpl(settings)
+        ObserveExampleNumber(settings)
 
     @Provides
     @Singleton
@@ -160,5 +160,5 @@ object MainModule {
     @Provides
     @Singleton
     fun providesCheckIfObjectExists(stocktakingRepository: StocktakingRepository): GetObjectByBarcode =
-        GetObjectByBarcodeImpl(stocktakingRepository)
+        GetObjectByBarcode(stocktakingRepository)
 }
