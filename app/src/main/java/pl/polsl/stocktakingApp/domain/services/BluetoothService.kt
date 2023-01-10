@@ -24,8 +24,9 @@ import java.io.IOException
 class BluetoothService(
     private val _context: Context
 ) {
-    private val _bluetoothAdapter: BluetoothAdapter =
+    private val _bluetoothAdapter: BluetoothAdapter by lazy {
         (_context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
+    }
 
     private val isVersionAboveAndroidR: Boolean
         get() = Build.VERSION.SDK_INT > Build.VERSION_CODES.R
@@ -38,22 +39,26 @@ class BluetoothService(
 
     @SuppressLint("MissingPermission")
     suspend fun provideBluetoothConnection(): Result {
-        if (_bluetoothAdapter.isEnabled) {
-            return Result.Successful
-        } else {
-            if (isVersionAboveAndroidR && !isPermissionGranted
-            ) {
-                return Result.Error.PermissionNotGranted
+        try {
+            if (_bluetoothAdapter.isEnabled) {
+                return Result.Successful
             } else {
-                _bluetoothAdapter.enable()
-                for (i in 0 until 6) {
-                    delay(300)
-                    if (_bluetoothAdapter.isEnabled) {
-                        return Result.Successful
+                if (isVersionAboveAndroidR && !isPermissionGranted
+                ) {
+                    return Result.Error.PermissionNotGranted
+                } else {
+                    _bluetoothAdapter.enable()
+                    for (i in 0 until 6) {
+                        delay(300)
+                        if (_bluetoothAdapter.isEnabled) {
+                            return Result.Successful
+                        }
                     }
+                    return Result.Error.BluetoothEnabling
                 }
-                return Result.Error.BluetoothEnabling
             }
+        } catch (e: Exception) {
+            return Result.Error.BluetoothEnabling
         }
     }
 
