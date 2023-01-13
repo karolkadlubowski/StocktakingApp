@@ -135,7 +135,8 @@ fun ModifyObjectScreen(
                 value = state.description,
                 onValueChange = viewModel::setDescription,
                 description = "Opis",
-                singleLine = false
+                singleLine = false,
+                maxLines = 10
             )
             InputField(
                 value = state.amount,
