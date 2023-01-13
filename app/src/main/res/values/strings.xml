@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StocktakingApp</string>
+    <string name="app_name">Inwentaryzacja AEI</string>
     <string name="textNotRecognized">Skanowanie nie wykazało żadnego tekstu</string>
     <string name="objectList">Lista obiektów</string>
     <string name="iconDescription">Ikona</string>
