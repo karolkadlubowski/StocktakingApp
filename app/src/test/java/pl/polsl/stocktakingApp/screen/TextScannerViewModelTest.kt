@@ -19,7 +19,7 @@ import pl.polsl.stocktakingApp.presentation.textScanner.TextScannerScreenState
 import pl.polsl.stocktakingApp.presentation.textScanner.TextScannerScreenViewModel
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TextScannerViewModelViewModelTest : BaseTest<TextScannerScreenViewModel>() {
+class TextScannerViewModelTest : BaseTest<TextScannerScreenViewModel>() {
     private val regexService: RegexService = mockk()
     private val getObjectByBarcode: GetObjectByBarcode = mockk()
     private val observeRegex: ObserveExampleNumber = mockk()
