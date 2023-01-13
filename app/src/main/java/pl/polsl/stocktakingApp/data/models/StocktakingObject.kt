@@ -42,9 +42,5 @@ data class StocktakingObject(
         override fun newArray(size: Int): Array<StocktakingObject?> {
             return arrayOfNulls(size)
         }
-
-        //val default = StocktakingObject()
     }
-
-    //constructor(i: Int, s: String, s1: String, s2: String, i1: Int, s3: String) : this(i,s,s1,s2,i1,s3)
 }
