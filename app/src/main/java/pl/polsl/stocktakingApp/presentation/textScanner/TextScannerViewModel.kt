@@ -33,8 +33,8 @@ class TextScannerScreenViewModel @Inject constructor(
 
     private var _regex: Flow<String?> = _observeRegex(Unit)
 
-    private val _recognizer: TextRecognizer =
-        TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+    private val _recognizer: TextRecognizer by
+    lazy { TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS) }
 
     fun onPhotoTaken(photoUri: Uri) {
         _state.value = TextScannerScreenState.Cropping(photoUri)
