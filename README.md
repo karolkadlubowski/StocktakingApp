@@ -10,7 +10,7 @@ The application is built in MVVM architecture. The main issues of the project ar
 -Dependency Injection - Hilt<br>
 -Google Machine Learning Kit<br>
 -Bluetooth<br>
--Zebra Printer handling
+-Zebra Printer handling<br>
 -Unit tests<be>
 
 The main screen of the application, which appears upon launch, displays objects stored in the database. Users can filter the list by name or number. Clicking on an object tile opens its edit screen. From the list screen, users can also print a label by clicking the printer icon on the object tile. The top right corner features three icons for navigating to the scan screen, object modification screen, and configuration screen.
