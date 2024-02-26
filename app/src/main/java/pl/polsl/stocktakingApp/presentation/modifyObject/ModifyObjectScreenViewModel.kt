@@ -112,9 +112,9 @@ class ModifyObjectScreenViewModel @Inject constructor(
         _amount.update { amount }
     }
 
-    object EmptyTextFields : Event.Message(R.string.EmptyFieldsEvent)
+    object EmptyTextFields : Event.Message(R.string.emptyFieldsEvent)
     object ObjectUpsertSuccess : Event()
-    object ObjectAlreadyExists : Event.Message(R.string.ObjectAlreadyExistsEvent)
+    object ObjectAlreadyExists : Event.Message(R.string.objectAlreadyExistsEvent)
 }
 
 sealed class ModifyObjectScreenState {

@@ -1,5 +1,6 @@
 package pl.polsl.stocktakingApp.presentation.common.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,6 +22,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -40,7 +42,8 @@ fun InputField(
     keyboardActions: KeyboardActions = KeyboardActions(),
     border: BorderStroke? = null,
     maxLines: Int = 1,
-    description: String,
+    @StringRes
+    description: Int,
     isEnabled: Boolean = true
 ) {
 
@@ -48,7 +51,7 @@ fun InputField(
 
     Column(modifier.padding(bottom = 10.dp)) {
         Text(
-            text = description,
+            text = stringResource(id =description),
             style = MaterialTheme.typography.inputFieldHeader,
             modifier = Modifier.padding(bottom = 6.dp)
         )

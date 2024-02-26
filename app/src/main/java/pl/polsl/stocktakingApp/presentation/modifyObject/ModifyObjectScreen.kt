@@ -2,7 +2,12 @@ package pl.polsl.stocktakingApp.presentation.modifyObject
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.SnackbarHostState
@@ -123,25 +128,25 @@ fun ModifyObjectScreen(
             InputField(
                 value = state.name,
                 onValueChange = viewModel::setName,
-                description = "Nazwa"
+                description = R.string.nameLabel
             )
             InputField(
                 value = state.barcode,
                 onValueChange = viewModel::setBarcode,
-                description = "Kod",
+                description = R.string.barcodeLabel,
                 isEnabled = state is ModifyObjectScreenState.AddObjectState
             )
             InputField(
                 value = state.description,
                 onValueChange = viewModel::setDescription,
-                description = "Opis",
+                description = R.string.descriptionLabel,
                 singleLine = false,
                 maxLines = 10
             )
             InputField(
                 value = state.amount,
                 onValueChange = { viewModel.setAmount(it.filterNot { it.isWhitespace() || !it.isDigit() }) },
-                description = "Ilość",
+                description = R.string.amountLabel,
                 keyboardOptions = KeyboardOptions().copy(keyboardType = KeyboardType.Number)
             )
 
@@ -152,7 +157,7 @@ fun ModifyObjectScreen(
             ) {
                 Text(
                     textAlign = TextAlign.Center,
-                    text = "Akceptuj",
+                    text = stringResource(R.string.acceptButtonLabel),
                     modifier = Modifier
                         .padding(vertical = 8.dp)
                         .fillMaxWidth(),

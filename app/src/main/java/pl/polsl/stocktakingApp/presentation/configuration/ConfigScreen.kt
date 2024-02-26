@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import pl.polsl.stocktakingApp.R
 import pl.polsl.stocktakingApp.presentation.common.observeState
 import pl.polsl.stocktakingApp.presentation.common.ui.FilterSwitcher
 import pl.polsl.stocktakingApp.presentation.common.ui.InputField
@@ -48,7 +49,7 @@ fun ConfigScreen(
     ) {
         item {
             Text(
-                "Konfiguracja",
+                stringResource(id = R.string.configurationPageTitle),
                 style = MaterialTheme.typography.pageTitle,
                 modifier = Modifier
                     .padding(vertical = 10.dp)
@@ -59,11 +60,11 @@ fun ConfigScreen(
                 onValueChange = {
                     viewModel.changeExampleNumber(it)
                 },
-                description = "Przykładowy numer"
+                description = R.string.exampleNumberDescription,
             )
 
             Text(
-                text = "Rodzaj etykiety",
+                text = stringResource(id =R.string.labelTypeLabel),
                 style = MaterialTheme.typography.inputFieldHeader,
                 modifier = Modifier.padding(
                     bottom = 6.dp,
@@ -80,7 +81,7 @@ fun ConfigScreen(
             }
 
             Text(
-                text = "Urządzenie bluetooth",
+                text = stringResource(id = R.string.printerLabel),
                 style = MaterialTheme.typography.inputFieldHeader,
                 modifier = Modifier.padding(
                     bottom = 6.dp,

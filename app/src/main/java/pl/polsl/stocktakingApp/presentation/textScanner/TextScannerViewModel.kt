@@ -80,7 +80,7 @@ class TextScannerScreenViewModel @Inject constructor(
         }
     }
 
-    object ObjectNotExists : Event.Message(R.string.ObjectNotExistsEvent)
+    object ObjectNotExists : Event.Message(R.string.objectNotExistsEvent)
     data class ObjectExists(val stocktakingObject: StocktakingObject) : Event()
 }
 
