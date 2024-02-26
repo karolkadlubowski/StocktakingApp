@@ -6,6 +6,7 @@ The application is built in MVVM architecture. The main issues of the project ar
 -Jetpack Compose<br>
 -Room Database<br>
 -Coroutines<br>
+-Flow<br>
 -View Model<br>
 -Dependency Injection - Hilt<br>
 -Google Machine Learning Kit<br>
