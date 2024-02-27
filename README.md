@@ -1,16 +1,18 @@
 # Stocktaking application
 
-The application is an advanced mobile solution leveraging Google's ML Kit for text and barcode recognition to facilitate inventory management. It enables efficient conversion of handwritten inventory numbers into 1D/2D codes, significantly speeding up the inventory process. By utilizing Google ML Kit, the app offers robust text recognition capabilities, allowing for accurate scanning and digitization of inventory numbers. Additionally, the integration with Zebra printers enhances the app's functionality by enabling the immediate printing of barcode labels. This not only streamlines the inventory management process but also ensures accuracy and efficiency in tracking and managing inventory items. The application serves as a modern solution to outdated inventory methods, offering database storage for easy editing and management of inventory items, and supports the printing of labels for future inventories, making it an invaluable tool for entities still reliant on manual inventory systems.
+The application is an advanced mobile solution leveraging Google's ML Kit for text and barcode recognition to facilitate inventory management. It enables efficient conversion of handwritten inventory numbers into 1D/2D codes, significantly speeding up the inventory process. By utilizing Google ML Kit, the app offers robust text recognition capabilities, allowing for accurate scanning and digitization of inventory numbers. Additionally, the integration with Zebra printers enhances the app's functionality by enabling the immediate printing of barcode labels. This not only streamlines the inventory management process but also ensures accuracy and efficiency in tracking and managing inventory items.
 
 The application is built in MVVM architecture. The main issues of the project are:<br>
 -Jetpack Compose<br>
 -Room Database<br>
 -Coroutines<br>
+-Flow<br>
 -View Model<br>
 -Dependency Injection - Hilt<br>
 -Google Machine Learning Kit<br>
 -Bluetooth<br>
--Zebra Printer handling<be>
+-Zebra Printer handling<br>
+-Unit tests<be>
 
 The main screen of the application, which appears upon launch, displays objects stored in the database. Users can filter the list by name or number. Clicking on an object tile opens its edit screen. From the list screen, users can also print a label by clicking the printer icon on the object tile. The top right corner features three icons for navigating to the scan screen, object modification screen, and configuration screen.
 
